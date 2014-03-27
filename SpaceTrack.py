@@ -20,9 +20,11 @@ class SpaceTrack:
             'password':self.pwd}
         )    
         
-        tle = urllib.urlopen(self.LOGIN_URL, data=postData).read().splitlines()
-
-        return TLE(datetime.datetime.now(), tle[0], tle[1], tle[2])
+        try:
+            tle = urllib.urlopen(self.LOGIN_URL, data=postData).read().splitlines()
+            return TLE(datetime.datetime.now(), tle[0], tle[1], tle[2])
+        except:
+            return None
 
 def main():
     spaceTrack = SpaceTrack("jamesfowkes@gmail.com", "8rG1eGouVx2aW0X9NzgAj5YDJwaVZO4ciwvmBKi5")

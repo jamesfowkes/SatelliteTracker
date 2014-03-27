@@ -78,12 +78,15 @@ def main():
         outputStream = serial.Serial(args.port, int(args.baudrate))
     else:
         outputStream = sys.stdout
-        
-    tleParser = TLEParser(NOTTM_LONLAT, NOTTM_ELEVATION, tleProvider.GetTLEByName(args.tle))
+
+    tle = tleProvider.GetTLEByName(args.tle)
+    tleParser = TLEParser(NOTTM_LONLAT, NOTTM_ELEVATION, tle)
 
     while(True):
         try:
-            tleProvider.refresh(args.tle)
+            if tleProvider.RefreshTLE(tleParser.tle) == False:
+                print("Warning: TLE failed to refresh")
+                
             tleParser.update()
             latlongString = "AZ%04dAL%04d\n" % (tleParser.getAzimuth() * 10, tleParser.getAltitude() * 10)
             outputStream.write(latlongString)

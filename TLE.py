@@ -11,12 +11,18 @@ class TLE:
         self.line2 = line2
         self.name = self.idLine[2:]
         self.norad_id = self.line2[2:7]
-        self.updateIntervalMinutes = 120 #Default update interval is two hours
-        
+        self.updateIntervalSeconds = 2 * 60 * 60 #Default update interval is two hours
+
+    def updateFromOtherTLE(self, tle):
+        if self.idLine == tle.idLine:
+            self.line1 = tle.line1
+            self.line2 = tle.line2
+            self.lastUpdate = datetime.datetime.now()
+            
     @classmethod 
     def read(cls, stream_object):
         
-        tleData = stream_object.readlines()
+        tleData = stream_object.read().splitlines()
         
         lastUpdate = datetime.datetime.fromtimestamp(int(tleData[0]))
         idLine = tleData[1]
@@ -30,24 +36,23 @@ class TLE:
         stream_object.write( self.idLine + os.linesep)
         stream_object.write( self.line1 + os.linesep)
         stream_object.write( self.line2 + os.linesep)
-
-    def setUpdateInterval(self, newInterval):
-        self.updateIntervalMinutes = newInterval
+        
+    def setUpdateIntervalSeconds(self, newInterval):
+        self.updateIntervalSeconds = newInterval
+        
+    def setUpdateIntervalMinutes(self, newInterval):
+        self.updateIntervalSeconds = newInterval * 60
         
     def getTLE(self):
         return [self.idLine, self.line1, self.line2]
 
+    def matchID(self, id):
+        return self.norad_id == id
+        
     def matchName(self, name):
         return name in self.name
         
     def isOld(self):
-        isOld = False
-
-        ## Let two hours elapse before requesting again
-        try:
-            secondsSinceLastUpdate = (datetime.datetime.now() - self.lastUpdate).total_seconds()
-            isOld = (secondsSinceLastUpdate > (self.updateIntervalMinutes * 60))
-        except TypeError:
-            isOld = True #No updates have occured at all, as self.lastUpdate is None
-        
-        return isOld
+        secondsSinceLastUpdate = (datetime.datetime.now() - self.lastUpdate).total_seconds()
+        return (secondsSinceLastUpdate > (self.updateIntervalSeconds ))
+   
