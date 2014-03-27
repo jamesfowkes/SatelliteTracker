@@ -21,7 +21,9 @@ class TLEParser:
         self.setNewObserver(observer_latlong, observer_elevation)
         
     def setNewTLE(self, tle):
-        self.sat = ephem.readtle(tle[0], tle[1], tle[2])
+        self.tle = tle
+        data = tle.getTLE()
+        self.sat = ephem.readtle(data[0], data[1], data[2])
 
     def setNewObserver(self, observer_latlong, observer_elevation):
         
@@ -70,17 +72,18 @@ def main():
     arg_parser = get_arg_parser()
     args = arg_parser.parse_args()
     
-    tleProvider = TLEProvider()
+    tleProvider = TLEProvider("TLE")
     
     if args.port is not None:
         outputStream = serial.Serial(args.port, int(args.baudrate))
     else:
         outputStream = sys.stdout
         
-    tleParser = TLEParser(NOTTM_LONLAT, NOTTM_ELEVATION, tleProvider.GetTLE(args.tle))
+    tleParser = TLEParser(NOTTM_LONLAT, NOTTM_ELEVATION, tleProvider.GetTLEByName(args.tle))
 
     while(True):
         try:
+            tleProvider.refresh(args.tle)
             tleParser.update()
             latlongString = "AZ%04dAL%04d\n" % (tleParser.getAzimuth() * 10, tleParser.getAltitude() * 10)
             outputStream.write(latlongString)
