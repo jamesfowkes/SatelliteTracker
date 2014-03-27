@@ -20,7 +20,6 @@ class TLEProvider:
         tleFile = open(file, 'r')
         try:
             tle = TLE.read(tleFile)
-            tle.setUpdateIntervalSeconds(15)
             self.tles.append( tle )
         except:
             raise
