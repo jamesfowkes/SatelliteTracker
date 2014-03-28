@@ -44,10 +44,10 @@ class TLEParser:
         else:
             return self.sat.alt
         
-    def update(self, datetime = None):
-        if datetime is None:
-            datetime = datetime.utcnow()
-        self.observer.date = datetime
+    def update(self, dt = None):
+        if dt is None:
+            dt = datetime.utcnow()
+        self.observer.date = dt
         self.sat.compute(self.observer)
 
 def get_arg_parser():
