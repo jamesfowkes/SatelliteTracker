@@ -7,6 +7,7 @@
 #include "utility/Adafruit_PWMServoDriver.h"
 
 /* Serial Comms Helper Library */
+#include <ArduinoUtil.h>
 #include <SerialMessaging.h>
 
 /* Defines and Typedefs */
@@ -32,7 +33,7 @@ static void resetMotorPosition(void);
 static void updateMotorHomeStates(void);
 
 static int spr(void);
-static int degreesToSteps(int angleTenthsDegrees);
+static int tenthDegreesToSteps(int angleTenthsDegrees);
 
 /* Private Variables and Objects */
 
@@ -88,8 +89,21 @@ static void SerialMessageCallback(String* message)
     int azimuth = message->substring(2, 6).toInt();
     int altitude = message->substring(8, 12).toInt();
 
-    int azSteps = degreesToSteps(azimuth);
-    int alSteps = degreesToSteps(altitude);
+    /* Correct azimuth and altitude ranges to 0-360 degrees */
+    if (azimuth < 1800)
+    {
+      // No change to azimuth, altitude needs increasing by 90 degrees */
+      altitude += 900; 
+    }
+    else
+    {
+      // Azimuth is mirrored about N, altitude is reversed
+      azimuth -= 1800;
+      altitude = 2700 - altitude;
+    }
+
+    int azSteps = tenthDegreesToSteps(azimuth);
+    int alSteps = tenthDegreesToSteps(altitude);
 
     s_SerialMessaging.Print("Moving to ");
     s_SerialMessaging.Print(azSteps);
@@ -98,6 +112,16 @@ static void SerialMessageCallback(String* message)
 
     azimuthStepper.moveTo(azSteps);
     altitudeStepper.moveTo(alSteps);
+  }
+  else if (message->equals("RELEASE"))
+  {
+    azimuthMotor->release();
+    altitudeMotor->release();
+  }
+  else if (message->equals("ENGAGE"))
+  {
+    resetMotorPosition();
+    resetMotorSpeed();
   }
 }
 
@@ -139,27 +163,27 @@ static void resetMotorSpeed(void)
 
 }
 
-static void homeMotors(void)
-{	
-  updateMotorHomeStates();
-
-  while (azimuthStepper.distanceToGo() || altitudeStepper.distanceToGo())
-  {
-    updateMotorHomeStates();
-
-    if (!azMotorHomed) { 
-      azimuthStepper.move(1); 
-    }
-    if (!alMotorHomed) { 
-      altitudeStepper.move(1); 
-    }
-
-    azimuthStepper.run();
-    altitudeStepper.run();
-  }
-  resetMotorPosition();
-  resetMotorSpeed();
-}
+/*static void homeMotors(void)
+ {	
+ updateMotorHomeStates();
+ 
+ while (azimuthStepper.distanceToGo() || altitudeStepper.distanceToGo())
+ {
+ updateMotorHomeStates();
+ 
+ if (!azMotorHomed) { 
+ azimuthStepper.move(1); 
+ }
+ if (!alMotorHomed) { 
+ altitudeStepper.move(1); 
+ }
+ 
+ azimuthStepper.run();
+ altitudeStepper.run();
+ }
+ resetMotorPosition();
+ resetMotorSpeed();
+ }*/
 
 static void updateMotorHomeStates(void)
 {
@@ -174,9 +198,9 @@ void serialEvent()
 }
 
 /* Helper functions */
-static int degreesToSteps(int angleTenthsDegrees)
+static int tenthDegreesToSteps(int angleTenthsDegrees)
 {
-  
+
   int steps = ((((long)spr() * (long)angleTenthsDegrees)) + 1800) / 3600;
   return steps;
 }
@@ -189,13 +213,17 @@ static int spr(void)
   }
   else if (s_steppingMode == INTERLEAVE)
   {
-   return BASE_SPR * 2; 
+    return BASE_SPR * 2; 
   }
   else if (s_steppingMode == MICROSTEP)
   {
-    return BASE_SPR * 16;
+    return BASE_SPR * MICROSTEPS;
   }
-  
+
   return BASE_SPR;
 }
+
+
+
+
 
