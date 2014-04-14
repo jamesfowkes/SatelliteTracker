@@ -14,6 +14,11 @@ SEND_INTERVAL_SECONDS = 2
 NOTTM_LONLAT = ('1.13', '52.95')
 NOTTM_ELEVATION = 80
 
+class TLEParserError(Exception):
+    def __init__(self, expr, msg):
+        self.expr = expr
+        self.msg = msg
+        
 class TLEParser:
     
     def __init__(self, observer_latlong, observer_elevation, tle):
@@ -21,10 +26,13 @@ class TLEParser:
         self.setNewObserver(observer_latlong, observer_elevation)
         
     def setNewTLE(self, tle):
-        self.tle = tle
-        data = tle.getTLE()
-        self.sat = ephem.readtle(data[0], data[1], data[2])
-
+        try:
+            self.tle = tle
+            data = tle.getTLE()
+            self.sat = ephem.readtle(data[0], data[1], data[2])
+        except:
+            raise TLEParserError("", "Provided TLE could not be parsed")
+            
     def setNewObserver(self, observer_latlong, observer_elevation):
         
         self.observer = ephem.Observer()
@@ -78,12 +86,15 @@ def main():
     
     if args.port is not None:
         outputStream = serial.Serial(args.port, int(args.baudrate))
-    else:
-        outputStream = sys.stdout
-
+    
     tle = tleProvider.GetTLEByName(args.tle)
+    
     tleParser = TLEParser(NOTTM_LONLAT, NOTTM_ELEVATION, tle)
 
+    time.sleep(5)
+    outputStream.write("ENGAGE\n")
+    time.sleep(5)
+    
     while(True):
         try:
             if tleProvider.RefreshTLE(tleParser.tle) == False:
@@ -92,6 +103,7 @@ def main():
             tleParser.update()
             latlongString = "AZ%04dAL%04d\n" % (tleParser.getAzimuth() * 10, tleParser.getAltitude() * 10)
             outputStream.write(latlongString)
+            print(latlongString)
             time.sleep(SEND_INTERVAL_SECONDS)
             
         except KeyboardInterrupt:

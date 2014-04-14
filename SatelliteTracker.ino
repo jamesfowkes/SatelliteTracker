@@ -20,6 +20,9 @@
 
 #define BASE_SPR 200
 
+#define AZIMUTH_DIRECTION 1
+#define ALTITUDE_DIRECTION -1
+
 /* Private Function Prototypes */
 static void fwdAzimuthMotor(void);
 static void revAzimuthMotor(void);
@@ -30,6 +33,8 @@ static void SerialMessageCallback(String* message);
 
 static void initMotors(void);
 //static void homeMotors(void);
+static void releaseMotors(void);
+
 static void resetMotorSpeed(void);
 static void resetMotorPosition(void);
 
@@ -53,16 +58,16 @@ static SerialMessaging s_SerialMessaging(SerialMessageCallback);
 //static bool azMotorHomed = false;
 //static bool alMotorHomed = false;
 
-static int s_steppingMode = INTERLEAVE;
+static int s_steppingMode = MICROSTEP;
 
 void setup()
 {
   pinMode(AZ_MOTOR_HOME_PIN, INPUT);
   pinMode(AL_MOTOR_HOME_PIN, INPUT);
 
-  initMotors();
-  resetMotorPosition();
-  resetMotorSpeed();
+  motorShield.begin();
+  releaseMotors();
+
   s_SerialMessaging.Begin(115200);
 
   s_SerialMessaging.Println("Tracker v1 Ready");
@@ -92,15 +97,15 @@ static void SerialMessageCallback(String* message)
     int azimuth = message->substring(2, 6).toInt();
     int altitude = message->substring(8, 12).toInt();
 
-	/* Shift altitude around 1/4 turn (shift -90 to 90 range into 0-180 range) */
-	altitude += 900; 
-	
+    /* Shift altitude around 1/4 turn (shift -90 to 90 range into 0-180 range) */
+    altitude += 900; 
+
     /* Correct azimuth and altitude ranges to 0-360 degrees */
     if (azimuth >= 1800)
     {
       // Take reciprocal of azimuth, altitude is mirrored about N-S line.
-      azimuth = reciprocal_deg(azimuth)
-	  altitude = mirror_deg(altitude, 0);
+      azimuth = reciprocal_tdeg(azimuth);
+      altitude = mirror_tdeg(altitude, 0);
     }
 
     int azSteps = tenthDegreesToSteps(azimuth);
@@ -109,21 +114,33 @@ static void SerialMessageCallback(String* message)
     s_SerialMessaging.Print("Moving to ");
     s_SerialMessaging.Print(azSteps);
     s_SerialMessaging.Print(",");
-    s_SerialMessaging.Println(alSteps);
-
-    azimuthStepper.moveTo(azSteps);
-    altitudeStepper.moveTo(alSteps);
+    s_SerialMessaging.Print(alSteps);
+    s_SerialMessaging.Print(" (");   
+    s_SerialMessaging.Print(azimuth);
+    s_SerialMessaging.Print(",");
+    s_SerialMessaging.Print(altitude);
+    s_SerialMessaging.Println(")");
+    
+    azimuthStepper.moveTo(AZIMUTH_DIRECTION * azSteps);
+    altitudeStepper.moveTo(ALTITUDE_DIRECTION * alSteps);
   }
   else if (message->equals("RELEASE"))
   {
-    azimuthMotor->release();
-    altitudeMotor->release();
+    s_SerialMessaging.Println("Releasing...");
+    releaseMotors();
   }
   else if (message->equals("ENGAGE"))
   {
+    s_SerialMessaging.Println("Engaging...");
     resetMotorPosition();
     resetMotorSpeed();
   }
+}
+
+static void releaseMotors(void)
+{
+  azimuthMotor->release();
+  altitudeMotor->release();
 }
 
 static void fwdAzimuthMotor(void)	{ 
@@ -139,12 +156,6 @@ static void revAltitudeMotor(void)	{
   altitudeMotor->onestep(BACKWARD, s_steppingMode); 
 }
 
-static void initMotors(void)
-{
-  motorShield.begin();
-  resetMotorSpeed();
-}
-
 static void resetMotorPosition(void)
 {
   azimuthStepper.setCurrentPosition(0);
@@ -153,14 +164,14 @@ static void resetMotorPosition(void)
 
 static void resetMotorSpeed(void)
 {
-  azimuthStepper.setMaxSpeed(100.0f);
-  altitudeStepper.setMaxSpeed(100.0f);
+  azimuthStepper.setMaxSpeed(1000.0f);
+  altitudeStepper.setMaxSpeed(1000.0f);
 
-  azimuthStepper.setSpeed(50.0f);
-  altitudeStepper.setSpeed(50.0f);
+  azimuthStepper.setSpeed(500.0f);
+  altitudeStepper.setSpeed(500.0f);
 
-  azimuthStepper.setAcceleration(100.0f);
-  altitudeStepper.setAcceleration(100.0f);
+  azimuthStepper.setAcceleration(500.0f);
+  altitudeStepper.setAcceleration(500.0f);
 
 }
 
@@ -187,11 +198,11 @@ static void resetMotorSpeed(void)
  }*/
 /*
 static void updateMotorHomeStates(void)
-{
-  azMotorHomed = digitalRead(AZ_MOTOR_HOME_PIN);
-  alMotorHomed = digitalRead(AL_MOTOR_HOME_PIN);
-}
-*/
+ {
+ azMotorHomed = digitalRead(AZ_MOTOR_HOME_PIN);
+ alMotorHomed = digitalRead(AL_MOTOR_HOME_PIN);
+ }
+ */
 
 /* Arduino library defined functions */
 void serialEvent()
@@ -224,6 +235,9 @@ static int spr(void)
 
   return BASE_SPR;
 }
+
+
+
 
 
 
