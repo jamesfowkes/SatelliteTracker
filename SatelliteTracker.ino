@@ -10,6 +10,9 @@
 #include <ArduinoUtil.h>
 #include <SerialMessaging.h>
 
+/* Utility Libraries */
+#include <util_angle.h>
+
 /* Defines and Typedefs */
 
 #define AZ_MOTOR_HOME_PIN 0
@@ -26,11 +29,11 @@ static void revAltitudeMotor(void);
 static void SerialMessageCallback(String* message);
 
 static void initMotors(void);
-static void homeMotors(void);
+//static void homeMotors(void);
 static void resetMotorSpeed(void);
 static void resetMotorPosition(void);
 
-static void updateMotorHomeStates(void);
+//static void updateMotorHomeStates(void);
 
 static int spr(void);
 static int tenthDegreesToSteps(int angleTenthsDegrees);
@@ -47,8 +50,8 @@ static AccelStepper altitudeStepper = AccelStepper(fwdAltitudeMotor, revAltitude
 
 static SerialMessaging s_SerialMessaging(SerialMessageCallback);
 
-static bool azMotorHomed = false;
-static bool alMotorHomed = false;
+//static bool azMotorHomed = false;
+//static bool alMotorHomed = false;
 
 static int s_steppingMode = INTERLEAVE;
 
@@ -89,17 +92,15 @@ static void SerialMessageCallback(String* message)
     int azimuth = message->substring(2, 6).toInt();
     int altitude = message->substring(8, 12).toInt();
 
+	/* Shift altitude around 1/4 turn (shift -90 to 90 range into 0-180 range) */
+	altitude += 900; 
+	
     /* Correct azimuth and altitude ranges to 0-360 degrees */
-    if (azimuth < 1800)
+    if (azimuth >= 1800)
     {
-      // No change to azimuth, altitude needs increasing by 90 degrees */
-      altitude += 900; 
-    }
-    else
-    {
-      // Azimuth is mirrored about N, altitude is reversed
-      azimuth -= 1800;
-      altitude = 2700 - altitude;
+      // Take reciprocal of azimuth, altitude is mirrored about N-S line.
+      azimuth = reciprocal_deg(azimuth)
+	  altitude = mirror_deg(altitude, 0);
     }
 
     int azSteps = tenthDegreesToSteps(azimuth);
@@ -184,12 +185,13 @@ static void resetMotorSpeed(void)
  resetMotorPosition();
  resetMotorSpeed();
  }*/
-
+/*
 static void updateMotorHomeStates(void)
 {
   azMotorHomed = digitalRead(AZ_MOTOR_HOME_PIN);
   alMotorHomed = digitalRead(AL_MOTOR_HOME_PIN);
 }
+*/
 
 /* Arduino library defined functions */
 void serialEvent()
