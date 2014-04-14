@@ -1,1 +1,5 @@
+## Compiled Python Files
 *.pyc
+
+## Two-Line Element files
+*.tle
