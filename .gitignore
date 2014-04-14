@@ -2,4 +2,4 @@
 *.pyc
 
 ## Two-Line Element files
-*.tle
+TLE/*
