@@ -37,6 +37,13 @@ def main():
     tleProvider = TLEProvider("TLE")
       
     tle = tleProvider.GetTLEByName(args.tle)
+
+    if tle is None:
+	tle = tleProvider.GetTLEByID(25544)
+
+    if tle is None:
+        sys.exit("TLE could not be found.")
+
     tleParser = TLEParser(NOTTM_LONLAT, NOTTM_ELEVATION, tle)
 
     motorControl = ArduinoHardware(args.port, args.baudrate)

@@ -32,7 +32,7 @@ class TLEProvider:
         tle.write(file)
         file.close()
 
-    def __findTLEById(self, id):
+    def __findTLEByID(self, id):
         return next((tle for tle in self.tles if tle.matchID(id)), None)
         
     def __findTLEByName(self, name):

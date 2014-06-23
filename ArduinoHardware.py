@@ -3,6 +3,8 @@ from HardwareInterface import HardwareInterface
 import serial
 import sys
 
+import time
+
 class ArduinoHardware(HardwareInterface):
     
     def __init__(self, port, baudrate):
@@ -18,6 +20,7 @@ class ArduinoHardware(HardwareInterface):
         self.ready = False
         
     def SetPosition(self, az, al):
+	print "Sending move to %f, %f" % (az, al)
         latlongString = "AZ%04dAL%04d\n" % (az * 10,  al * 10)
         self.moving = True
         self.outstream.write(latlongString)
@@ -32,13 +35,16 @@ class ArduinoHardware(HardwareInterface):
         
     def Update(self):
         line = self.instream.readline()
-        if line == "MOVC\n":
+        if line.startswith("MOVC"):
+            print "Arduino move complete!"
             self.moving = False
-        if line == "RDY\n":
+        if line.startswith("RDY"):
+            print "Arduino ready!"
             self.ready = True
             
     def Start(self):
         self.ready = False
+	time.sleep(10)
         self.outstream.write("ENGAGE\n")
         
     def Stop(self):
