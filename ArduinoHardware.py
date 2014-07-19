@@ -20,7 +20,7 @@ class ArduinoHardware(HardwareInterface):
         self.ready = False
         
     def SetPosition(self, az, al):
-	print "Sending move to %f, %f" % (az, al)
+        print "Sending move to %f, %f" % (az, al)
         latlongString = "AZ%04dAL%04d\n" % (az * 10,  al * 10)
         self.moving = True
         self.outstream.write(latlongString)
@@ -44,7 +44,7 @@ class ArduinoHardware(HardwareInterface):
             
     def Start(self):
         self.ready = False
-	time.sleep(10)
+        time.sleep(10)
         self.outstream.write("ENGAGE\n")
         
     def Stop(self):
