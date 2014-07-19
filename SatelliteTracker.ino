@@ -87,6 +87,7 @@ void loop()
   if (!stillRunning && running)
   {
       Serial.println("MOVC");
+	  running = false;
   }
   
   if (serialEventRun) {
