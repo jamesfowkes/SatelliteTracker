@@ -89,11 +89,9 @@ void loop()
       Serial.println("MOVC");
   }
   
-  running = stillRunning;
-  
-  if (serialEventRun) { 
+  if (serialEventRun) {
     serialEventRun(); 
-  }          
+  }
 }
 
 static void SerialMessageCallback(String* message)
@@ -130,7 +128,9 @@ static void SerialMessageCallback(String* message)
     s_SerialMessaging.Print(",");
     s_SerialMessaging.Print(altitude);
     s_SerialMessaging.Println(")");
-    
+  
+	running = true;
+	
     azimuthStepper.moveTo(AZIMUTH_DIRECTION * azSteps);
     altitudeStepper.moveTo(ALTITUDE_DIRECTION * alSteps);
   }
