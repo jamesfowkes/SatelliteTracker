@@ -13,7 +13,12 @@
 /* Utility Libraries */
 #include <util_angle.h>
 
+/* Application Includes */
+#include "MachineIf.h"
+
 /* Defines and Typedefs */
+
+#define VERSION_STRING "2"
 
 #define AZ_MOTOR_HOME_PIN 0
 #define AL_MOTOR_HOME_PIN 1
@@ -70,7 +75,9 @@ void setup()
 
   s_SerialMessaging.Begin(115200);
 
-  s_SerialMessaging.Println("Tracker v1 Ready");
+  s_SerialMessaging.Print("Tracker v");
+  s_SerialMessaging.Print(VERSION_STRING);
+  s_SerialMessaging.Println(" Ready");
   s_SerialMessaging.Println("Send commands in AZxxxxALyyyy format");
   s_SerialMessaging.Println("where xxxx and yyyy are tenths of degree");
   s_SerialMessaging.Println("positions for azimuth and altitude respectively");
@@ -103,31 +110,22 @@ static void SerialMessageCallback(String* message)
    	and ALxxxx represents the same for the altitude */
   if ((message->substring(0,2) == "AZ") && (message->substring(6,8) == "AL"))
   {
-    int azimuth = message->substring(2, 6).toInt();
-    int altitude = message->substring(8, 12).toInt();
+    int requested_azimuth = message->substring(2, 6).toInt();
+    int requested_altitude = message->substring(8, 12).toInt();
+	
+    translateMoveRequest(&requested_azimuth, &requested_altitude);
 
-    /* Shift altitude around 1/4 turn (shift -90 to 90 range into 0-180 range) */
-    altitude += 900; 
-
-    /* Correct azimuth and altitude ranges to 0-360 degrees */
-    if (azimuth >= 1800)
-    {
-      // Take reciprocal of azimuth, altitude is mirrored about N-S line.
-      azimuth = reciprocal_tdeg(azimuth);
-      altitude = mirror_tdeg(altitude, 0);
-    }
-
-    int azSteps = tenthDegreesToSteps(azimuth);
-    int alSteps = tenthDegreesToSteps(altitude);
+    int azSteps = tenthDegreesToSteps(requested_azimuth);
+    int alSteps = tenthDegreesToSteps(requested_altitude);
 
     s_SerialMessaging.Print("Moving to ");
     s_SerialMessaging.Print(azSteps);
     s_SerialMessaging.Print(",");
     s_SerialMessaging.Print(alSteps);
     s_SerialMessaging.Print(" (");   
-    s_SerialMessaging.Print(azimuth);
+    s_SerialMessaging.Print(requested_azimuth);
     s_SerialMessaging.Print(",");
-    s_SerialMessaging.Print(altitude);
+    s_SerialMessaging.Print(requested_altitude);
     s_SerialMessaging.Println(")");
   
 	running = true;
