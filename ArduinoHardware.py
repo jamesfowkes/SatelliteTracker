@@ -21,7 +21,7 @@ class ArduinoHardware(HardwareInterface):
         
     def SetPosition(self, az, al):
         print "Sending move to %f, %f" % (az, al)
-        latlongString = "AZ%04dAL%04d\n" % (az * 10,  al * 10)
+        latlongString = "AZ%05dAL%05d\n" % (az * 100,  al * 100)
         self.moving = True
         self.outstream.write(latlongString)
         

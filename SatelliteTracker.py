@@ -24,7 +24,7 @@ def get_arg_parser():
         help="The serial port to send data to")
         
     arg_parser.add_argument(
-        '--baudrate', dest='baudrate', default='9600',
+        '--baudrate', dest='baudrate', default='115200',
         help="The serial port to send data to")   
         
     return arg_parser

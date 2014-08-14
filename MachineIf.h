@@ -12,12 +12,12 @@
  * 3 - Small tracker
  */
  
-#define MACHINE_ID 1
+#define MACHINE_ID 2
 
 /*
  * Public Function Prototypes
  */
  
-void translateMoveRequest(int * pAzimuth, int * pAltitude);
+void translateMoveRequest(long * pAzimuth, long * pAltitude);
 
 #endif
