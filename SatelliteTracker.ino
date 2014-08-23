@@ -96,11 +96,11 @@ void setup()
   s_SerialMessaging.Print(VERSION_STRING);
   s_SerialMessaging.Println(" Ready");
   s_SerialMessaging.Print("Built for" );
-  #if MACHINE_ID == 1
+#if MACHINE_ID == 1
   s_SerialMessaging.Print(" prototype ");
-  #elif MACHINE_ID == 2
+#elif MACHINE_ID == 2
   s_SerialMessaging.Print(" massive ");
-  #endif
+#endif
   s_SerialMessaging.Println("tracker.");
   s_SerialMessaging.Println("Send commands in AZxxxxALyyyy format");
   s_SerialMessaging.Println("where xxxx and yyyy are tenths of degree");
@@ -109,11 +109,30 @@ void setup()
 }
 
 bool running = false;
+bool test[] = {
+  false, false};
 
 void loop()
 {
-  bool stillRunning = azimuthStepper.run();
-  stillRunning |= altitudeStepper.run();
+  bool stillRunning = test[0] || test[1];
+
+  if (test[0])
+  {
+    (void)azimuthStepper.runSpeed();
+  }
+  else
+  {
+    stillRunning |= azimuthStepper.run();
+  }
+
+  if (test[1])
+  {
+    stillRunning |= altitudeStepper.runSpeed();
+  }
+  else
+  {
+    stillRunning |= altitudeStepper.run();
+  }
 
   if (!stillRunning && running)
   {
@@ -148,7 +167,7 @@ static long getAltitude(String *message)
   return strtol(num, NULL, 10);
   //return message->substring(9, 14).toInt();
 }
-  
+
 static void SerialMessageCallback(String* message)
 {
   /* The message should come in format "AZxxxxALxxxx"
@@ -176,7 +195,6 @@ static void SerialMessageCallback(String* message)
     s_SerialMessaging.Println(")");
 
     running = true;
-
     azimuthStepper.moveTo(AZIMUTH_DIRECTION * azSteps);
     altitudeStepper.moveTo(ALTITUDE_DIRECTION * alSteps);
   }
@@ -191,6 +209,22 @@ static void SerialMessageCallback(String* message)
     s_SerialMessaging.Println("RDY");
     resetMotorPosition();
     resetMotorSpeed();
+  }
+  else if (message->equals("AZTEST"))
+  {
+    running = true;
+    azimuthStepper.setSpeed(500);
+    test[0] = true;
+  }
+  else if (message->equals("ALTEST"))
+  {
+    running = true;
+    altitudeStepper.setSpeed(500);
+    test[1] = true;
+  }
+  else if (message->startsWith("TS")
+  {
+    
   }
 }
 
@@ -313,7 +347,7 @@ static int hundrethDegreesToSteps(long angleHundrethsDegrees)
 
 static int spr(void)
 {
-  #if MACHINE_ID == 1
+#if MACHINE_ID == 1
   if ((s_steppingMode == SINGLE) || (s_steppingMode == DOUBLE))
   {
     return BASE_SPR;
@@ -326,11 +360,11 @@ static int spr(void)
   {
     return BASE_SPR * MICROSTEPS;
   }
-  
+
   return BASE_SPR;
-  #elif MACHINE_ID == 2
+#elif MACHINE_ID == 2
   return (int)((float)BASE_SPR * GEAR_RATIO);
-  #endif
+#endif
 }
 
 static void setupMachine(void)
@@ -357,4 +391,6 @@ static void heartbeat(void)
     digitalWrite(13, state = !state);
   } 
 }
+
+
 
