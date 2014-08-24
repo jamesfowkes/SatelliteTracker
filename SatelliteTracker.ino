@@ -112,6 +112,8 @@ bool running = false;
 bool test[] = {
   false, false};
 
+float runSpeedStepsPerSecond = 0.0f;
+
 void loop()
 {
   bool stillRunning = test[0] || test[1];
@@ -219,12 +221,23 @@ static void SerialMessageCallback(String* message)
   else if (message->equals("ALTEST"))
   {
     running = true;
-    altitudeStepper.setSpeed(500);
     test[1] = true;
   }
-  else if (message->startsWith("TS")
+  else if (message->startsWith("TS"))
   {
-    
+    unsigned long newSpeed = 0;
+    char num[6];
+    message->substring(2, 6).toCharArray(num, 5);
+    newSpeed = strtol(num, NULL, 10);
+    if (newSpeed)
+    {
+      s_SerialMessaging.Print("Setting new speed "); 
+      s_SerialMessaging.Print(newSpeed);
+      s_SerialMessaging.Println(" steps per second.");
+      runSpeedStepsPerSecond = (float)newSpeed;
+      azimuthStepper.setSpeed(runSpeedStepsPerSecond);
+      altitudeStepper.setSpeed(runSpeedStepsPerSecond);
+    }
   }
 }
 
@@ -292,11 +305,11 @@ static void resetMotorPosition(void)
 
 static void resetMotorSpeed(void)
 {
-  azimuthStepper.setMaxSpeed(1000.0f);
-  altitudeStepper.setMaxSpeed(1000.0f);
+  azimuthStepper.setMaxSpeed(10000.0f);
+  altitudeStepper.setMaxSpeed(10000.0f);
 
-  azimuthStepper.setSpeed(500.0f);
-  altitudeStepper.setSpeed(500.0f);
+  azimuthStepper.setSpeed(runSpeedStepsPerSecond);
+  altitudeStepper.setSpeed(runSpeedStepsPerSecond);
 
   azimuthStepper.setAcceleration(25.0f);
   altitudeStepper.setAcceleration(25.0f);
@@ -391,6 +404,7 @@ static void heartbeat(void)
     digitalWrite(13, state = !state);
   } 
 }
+
 
 
 
