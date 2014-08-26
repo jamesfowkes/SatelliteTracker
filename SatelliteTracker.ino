@@ -27,6 +27,7 @@
 
 #if MACHINE_ID == 2
 #define GEAR_RATIO 26.85f
+#define PLATFORM_RATIO (730.0f / 60.0f)
 #endif
 
 #define AZIMUTH_DIRECTION 1
@@ -221,6 +222,7 @@ static void SerialMessageCallback(String* message)
   else if (message->equals("ALTEST"))
   {
     running = true;
+    altitudeStepper.setSpeed(500);
     test[1] = true;
   }
   else if (message->startsWith("TS"))
@@ -376,7 +378,7 @@ static int spr(void)
 
   return BASE_SPR;
 #elif MACHINE_ID == 2
-  return (int)((float)BASE_SPR * GEAR_RATIO);
+  return (int)((float)BASE_SPR * GEAR_RATIO * PLATFORM_RATIO);
 #endif
 }
 
