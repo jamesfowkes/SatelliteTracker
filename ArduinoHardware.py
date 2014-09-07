@@ -7,7 +7,7 @@ import time
 
 class ArduinoHardware(HardwareInterface):
     
-    def __init__(self, port, baudrate):
+    def __init__(self, port, baudrate, echo):
         HardwareInterface.__init__(self)
         if port is not None:
             self.outstream = serial.Serial(port, int(baudrate))
@@ -18,8 +18,9 @@ class ArduinoHardware(HardwareInterface):
         
         self.moving = False
         self.ready = False
+        self.echoArduino = echo
         
-    def SetPosition(self, az, al):
+    def Move(self, az, al):
         print "Sending move to %f, %f" % (az, al)
         latlongString = "AZ%05dAL%05d\n" % (az * 100,  al * 100)
         self.moving = True
@@ -41,6 +42,9 @@ class ArduinoHardware(HardwareInterface):
         if line.startswith("RDY"):
             print "Arduino ready!"
             self.ready = True
+        
+        if self.echoArduino:
+            print line
             
     def Start(self):
         self.ready = False
@@ -50,3 +54,9 @@ class ArduinoHardware(HardwareInterface):
     def Stop(self):
         self.instream.close()
         self.outstream.close()
+
+    def SetAzimuth(self, az):
+        self.outstream.write("AZP%05d" % (az * 100))
+        
+    def SetAltitude(self, az):
+        self.outstream.write("ALP%05d" % (az * 100))

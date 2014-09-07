@@ -10,6 +10,9 @@ from TLEParser import TLEParser
 NOTTM_LONLAT = ('1.13', '52.95')
 NOTTM_ELEVATION = 80
 
+BLETCHLEY_LONLAT = ('0.767', '51.97')
+BLETCHLEY_ELEVATION = 80
+
 def get_arg_parser():
     """ Return a command line argument parser for this module """
     arg_parser = argparse.ArgumentParser(
@@ -26,6 +29,14 @@ def get_arg_parser():
     arg_parser.add_argument(
         '--baudrate', dest='baudrate', default='115200',
         help="The serial port to send data to")   
+
+    arg_parser.add_argument(
+        '--az', dest='azimuth', default='0',
+        help="The starting azimuth of the tracker")   
+        
+    arg_parser.add_argument(
+        '--al', dest='altitude', default='-90',
+        help="The starting altitude of the tracker")
         
     return arg_parser
 
@@ -46,12 +57,16 @@ def main():
 
     tleParser = TLEParser(NOTTM_LONLAT, NOTTM_ELEVATION, tle)
 
-    motorControl = ArduinoHardware(args.port, args.baudrate)
+    motorControl = ArduinoHardware(args.port, args.baudrate, True)
+    
+    motorControl.SetAzimuth(int(args.azimuth))
+    motorControl.SetAltitude(int(args.altitude))
+    
     motorControl.Start()
     
     while not motorControl.IsReady:
         motorControl.Update()
-        
+            
     while(True):
         try:
             if tleProvider.RefreshTLE(tleParser.tle) == False:
@@ -59,7 +74,7 @@ def main():
                       
             if not motorControl.IsMoving:
                 tleParser.update()
-                motorControl.SetPosition(tleParser.getAzimuth(), tleParser.getAltitude())
+                motorControl.Move(tleParser.getAzimuth(), tleParser.getAltitude())
             
             motorControl.Update()
                         

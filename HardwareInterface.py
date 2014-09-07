@@ -2,7 +2,7 @@ class HardwareInterface:
     def __init__(self):
         pass
         
-    def SetPosition(self, az, al):
+    def Move(self, az, al):
         pass
         
     def Stop(self):
@@ -12,4 +12,10 @@ class HardwareInterface:
         pass
 
     def Update(self):
+        pass
+        
+    def SetAzimuth(self, az):
+        pass
+        
+    def SetAltitude(self, al):
         pass
