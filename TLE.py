@@ -25,17 +25,17 @@ class TLE:
         tleData = stream_object.read().splitlines()
         
         lastUpdate = datetime.datetime.fromtimestamp(int(tleData[0]))
-        idLine = tleData[1]
-        line1 = tleData[2]
-        line2 = tleData[3]
+        idLine = tleData[1].decode('utf-8')
+        line1 = tleData[2].decode('utf-8')
+        line2 = tleData[3].decode('utf-8')
         
         return cls(lastUpdate, idLine, line1, line2)
         
     def write(self, stream_object):
-        stream_object.write( str(int(time.time())) + os.linesep)
-        stream_object.write( self.idLine + os.linesep)
-        stream_object.write( self.line1 + os.linesep)
-        stream_object.write( self.line2 + os.linesep)
+        stream_object.write( str(int(time.time())) + '\n')
+        stream_object.write( self.idLine + '\n')
+        stream_object.write( self.line1 + '\n')
+        stream_object.write( self.line2 + '\n')
         
     def setUpdateIntervalSeconds(self, newInterval):
         self.updateIntervalSeconds = newInterval

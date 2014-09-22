@@ -12,12 +12,16 @@ class TLEProvider:
         
         self.tleDirectory = tleDirectory
         self.tles = []
-        for file in os.listdir(tleDirectory):
-            if file.endswith(".tle"):
-                self.addTLEFromFile(tleDirectory+"/"+file)
-
+        
+        try: 
+            for file in os.listdir(tleDirectory):
+                if file.endswith(".tle"):
+                    self.addTLEFromFile(tleDirectory+"/"+file)
+        except FileNotFoundError:
+            os.mkdir(tleDirectory)
+        
     def addTLEFromFile(self, file):
-        tleFile = open(file, 'r')
+        tleFile = open(file, 'rb')
         try:
             tle = TLE.read(tleFile)
             self.tles.append( tle )
@@ -28,7 +32,7 @@ class TLEProvider:
         
     def writeTLEToFile(self, tle):
         filepath = self.tleDirectory + "/" + tle.norad_id + ".tle"
-        file = open (self.tleDirectory + "/" + tle.norad_id + ".tle", 'w')
+        file = open (self.tleDirectory + "/" + tle.norad_id + ".tle", 'w', encoding='utf-8')
         tle.write(file)
         file.close()
 
@@ -54,11 +58,10 @@ class TLEProvider:
         tle = self.__findTLEByID(id)
         
         if tle is None:
+            # If that didn't work, get it from spacetrack
             tle = self.spaceTrack.getTLE(id)
-            try:
-                self.RefreshTLE(tle)
-            except TypeError:
-                return None
+            if tle is not None:
+                self.writeTLEToFile(tle)
 
         return tle
         
