@@ -1,8 +1,14 @@
 class HardwareInterface:
     def __init__(self):
         pass
+    
+    def SetSpeed(self, dps):
+        pass
         
-    def Move(self, az, al):
+    def SetTargetPosition(self, az, al):
+        pass
+    
+    def Start(self):
         pass
         
     def Stop(self):

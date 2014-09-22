@@ -5,6 +5,10 @@ import sys
 
 import time
 
+STATE_UNKNOWN = 0
+STATE_IDLE = 1
+STATE_ONLINE = 2
+
 class ArduinoHardware(HardwareInterface):
     
     def __init__(self, port, baudrate, echo):
@@ -16,39 +20,55 @@ class ArduinoHardware(HardwareInterface):
             self.outstream = sys.stdout
             self.instream = sys.stdin
         
-        self.moving = False
-        self.ready = False
+        self.state = STATE_UNKNOWN
         self.echoArduino = echo
+    
+    def SetAzSpeed(self, dps):
+        print("Setting azimuth speed to %f dps" % dps)
+        string = "AZS%05d\n" % (dps * 100)
+        self.outstream.write(string)
         
-    def Move(self, az, al):
-        print "Sending move to %f, %f" % (az, al)
-        latlongString = "AZ%05dAL%05d\n" % (az * 100,  al * 100)
-        self.moving = True
-        self.outstream.write(latlongString)
+    def SetAlSpeed(self, dps):
+        print("Setting altitude speed to %f dps" % dps)
+        string = "ALS%05d\n" % (dps * 100)
+        self.outstream.write(string)
+    
+    def SetTargetAzimuth(self, az):
+        print("Sending target azimuth %f" % az)
+        string = "AZ%05d\n" % (az * 100)
+        self.outstream.write(string)
         
-    @property
-    def IsMoving(self):
-        return self.moving
-        
+    def SetTargetAltitude(self, al):
+        print("Sending target altitude %f" % al)
+        string = "AL%05d\n" % (al * 100)
+        self.outstream.write(string)
+               
     @property
     def IsReady(self):
-        return self.ready
+        return self.state != STATE_UNKNOWN
         
     def Update(self):
         line = self.instream.readline()
-        if line.startswith("MOVC"):
-            print "Arduino move complete!"
-            self.moving = False
-        if line.startswith("RDY"):
-            print "Arduino ready!"
-            self.ready = True
         
         if self.echoArduino:
-            print line
+            print("(Got '%s')" % line.rstrip())
+            
+        if self.state == STATE_UNKNOWN:
+            if line.startswith("OFFLINE"):
+                print ("Arduino ready.")
+                self.state = STATE_IDLE
+        
+        if self.state == STATE_IDLE:
+            if line.startswith("ONLINE"):
+                print("Motors powered.")
+                self.state = STATE_ONLINE
+        
+        if self.state == STATE_ONLINE:
+            if line.startswith("OFFLINE"):
+                print("Motors unpowered.")
+                self.state = STATE_IDLE
             
     def Start(self):
-        self.ready = False
-        time.sleep(10)
         self.outstream.write("ENGAGE\n")
         
     def Stop(self):
@@ -56,7 +76,7 @@ class ArduinoHardware(HardwareInterface):
         self.outstream.close()
 
     def SetAzimuth(self, az):
-        self.outstream.write("AZP%05d" % (az * 100))
+        self.outstream.write("AZP%05d\n" % (az * 100))
         
     def SetAltitude(self, az):
-        self.outstream.write("ALP%05d" % (az * 100))
+        self.outstream.write("ALP%05d\n" % (az * 100))
