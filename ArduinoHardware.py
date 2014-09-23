@@ -31,12 +31,12 @@ class ArduinoHardware(HardwareInterface):
         
     def SetAzSpeed(self, dps):
         self.logger.info("Setting azimuth speed to %f dps" % dps)
-        string = "AZS%05d\n" % (dps * 100)
+        string = "AZS%08d\n" % (dps * 100000)
         self.outstream.write(string)
         
     def SetAlSpeed(self, dps):
         self.logger.info("Setting altitude speed to %f dps" % dps)
-        string = "ALS%05d\n" % (dps * 100)
+        string = "ALS%08d\n" % (dps * 100000)
         self.outstream.write(string)
     
     def SetTargetAzimuth(self, az):

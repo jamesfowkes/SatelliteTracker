@@ -18,7 +18,7 @@
 
 /* Defines and Typedefs */
 
-#define VERSION_STRING "2"
+#define VERSION_STRING "3"
 
 #define BASE_SPR 200
 
@@ -83,6 +83,18 @@ static SerialMessaging s_SerialMessaging(SerialMessageCallback);
 static int s_steppingMode = MICROSTEP;
 static bool bStopRequest = false;
 
+static AccelStepper * steppers[2];
+
+static bool test[] = {
+  false, false};
+
+static float runSpeedStepsPerSecond = 0.0f;
+
+static long targetSpeedMillionthDegreesPerSecond[2] = {0L, 0L};
+static int targetPositionHundrethsDegrees[2] = {0, 0};
+
+static float maxSpeeds[2] = {200.0f, 500.0f};
+
 void setup()
 {
   pinMode(13, OUTPUT);
@@ -109,48 +121,26 @@ void setup()
   s_SerialMessaging.Print(spr(AZ_MOTOR));
   s_SerialMessaging.Print(", SPR(AL) = ");
   s_SerialMessaging.Println(spr(AL_MOTOR));
+  
+  s_SerialMessaging.Println("OFFLINE");
+  
+  steppers[AZ_MOTOR] = &azimuthStepper;
+  steppers[AL_MOTOR] = &altitudeStepper;
 }
-
-bool running = false;
-bool test[] = {
-  false, false};
-
-float runSpeedStepsPerSecond = 0.0f;
 
 void loop()
 {
-  bool stillRunning = test[AZ_MOTOR] || test[AL_MOTOR];
+  
+  azimuthStepper.runSpeed()
+  altitudeStepper.runSpeed()
 
-  if (test[AZ_MOTOR])
-  {
-    (void)azimuthStepper.runSpeed();
-  }
-  else
-  {
-    stillRunning |= azimuthStepper.run();
-  }
 
-  if (test[AL_MOTOR])
-  {
-    stillRunning |= altitudeStepper.runSpeed();
-  }
-  else
-  {
-    stillRunning |= altitudeStepper.run();
-  }
-
-  if (!stillRunning && running)
-  {
-    Serial.println("MOVC");
-    running = false;
-    if (bStopRequest)
-    {
-      bStopRequest = false;
-      s_SerialMessaging.Println("FREE");
-      releaseMotors();
-    }
-  }
-
+if (bStopRequest)
+{
+  bStopRequest = false;
+  s_SerialMessaging.Println("FREE");
+  releaseMotors();
+}
   if (serialEventRun) {
     serialEventRun(); 
   }
@@ -166,19 +156,16 @@ static bool isMoveMessage(String * message)
 static long getNumeric(String *message, int start, int finish)
 {
   char num[10];
+  
+  if (finish == -1) { finish = message->length() - 1; }
+  
   message->substring(start, finish).toCharArray(num, 10);
   return strtol(num, NULL, 10);
 }
 
-static void SerialMessageCallback(String* message)
+static void handleMove(String * message)
 {
-  /* The message should come in format "AZxxxxALxxxx"
-   	where AZxxxx represents the azimuth to point to in hundreths
-   	of degrees (e.g. AZ23073 represents an azimuth of 230.73 degrees)
-   	and ALxxxx represents the same for the altitude */
-  if (isMoveMessage(message))
-  {
-    long requested_azimuth = getNumeric(message, AZ_STRT, AZ_END);
+	long requested_azimuth = getNumeric(message, AZ_STRT, AZ_END);
     long requested_altitude = getNumeric(message, AL_STRT, AL_END);
 
     translateMoveRequest(&requested_azimuth, &requested_altitude);
@@ -199,36 +186,72 @@ static void SerialMessageCallback(String* message)
     running = true;
     azimuthStepper.moveTo(azSteps);
     altitudeStepper.moveTo(alSteps);
-  }
-  else if (message->equals("RELEASE"))
-  {
-    azimuthStepper.stop();
-    altitudeStepper.stop();
+}
+
+static void setCurrentMotorPosition(String* message, int motorID)
+{
+	
+	if (motorID > AL_MOTOR) { return; }
+	
+    long positionInHundrethsDegrees = getNumeric(message, 3, 8);
+
+	long positionInSteps = 0;
+	
+	switch(motorID)
+	{
+	case AZ_MOTOR:
+		positionInSteps = hundrethDegreesToSteps(positionInHundrethsDegrees, AZ_MOTOR);
+		break;
+	case AL_MOTOR:
+	    if(message->startsWith("ALP-"))
+		{
+		  positionInHundrethsDegrees = getNumeric(message, 3, 9);
+		}
+		else
+		{
+		  positionInHundrethsDegrees = getNumeric(message, 3, 8);
+		}
+		break;
+	default:
+		// Shouldn't get here due to test at top of function
+		break;
+	}
+
+    s_SerialMessaging.Print(motorID == AZ_MOTOR ? "Setting new azimuth " : "Setting new altitude ");
+    s_SerialMessaging.Print(positionInHundrethsDegrees);
+    s_SerialMessaging.Print(" = ");
+    s_SerialMessaging.Print(positionInSteps);
+    s_SerialMessaging.Println(" steps");
+	
+	steppers[motorID]->setCurrentPosition(positionInSteps);
+}
+
+static void startTest(String* message, int motorID)
+{
     running = true;
-    bStopRequest = true;    
-  }
-  else if (message->equals("ENGAGE"))
-  {
-    engageMotors();
-    s_SerialMessaging.Println("RDY");
-    test[AZ_MOTOR] = false;
-    test[AL_MOTOR] = false;
-    resetMotorSpeed();
-  }
-  else if (message->equals("AZTEST"))
-  {
-    running = true;
-    azimuthStepper.setSpeed(500);
-    test[AZ_MOTOR] = true;
-  }
-  else if (message->equals("ALTEST"))
-  {
-    running = true;
-    altitudeStepper.setSpeed(500);
-    test[AL_MOTOR] = true;
-  }
-  else if (message->startsWith("TS"))
-  {
+    steppers[motorID]->setSpeed(500);
+    test[motorID] = true;
+}
+
+static void calculateAndSetNewRunSpeed(int motorID)
+{
+	long dPosition = currentPositionSteps[motorID] - targetPositionSteps[motorID];
+	
+	if (abs(dPosition) > (spr(motorID) / 36))
+	{
+		// > 10 degrees from position, run at maximum speed for this motor
+		steppers[motorID]->setSpeed(maxSpeeds[motorID]);
+	}
+}
+
+static void setTargetSpeed(String* message, int motorID)
+{
+	targetSpeedMillionthDegreesPerSecond[motorID] = getNumeric(message, 2, -1);
+	calculateAndSetNewRunSpeed(motorID);
+}
+
+static void setTestSpeed(String* message)
+{
     long newSpeed = getNumeric(message, 2, 6);
 
     if (newSpeed)
@@ -240,40 +263,60 @@ static void SerialMessageCallback(String* message)
       azimuthStepper.setSpeed(runSpeedStepsPerSecond);
       altitudeStepper.setSpeed(runSpeedStepsPerSecond);
     }
+}
+
+static void SerialMessageCallback(String* message)
+{
+  /* The message should come in format "AZxxxxALxxxx"
+   	where AZxxxx represents the azimuth to point to in hundreths
+   	of degrees (e.g. AZ23073 represents an azimuth of 230.73 degrees)
+   	and ALxxxx represents the same for the altitude */
+  if (isMoveMessage(message))
+  {
+	handleMove(message);
+  }
+  else if (message->equals("RELEASE"))
+  {
+    azimuthStepper.stop();
+    altitudeStepper.stop();
+    running = true;
+    bStopRequest = true;    
+  }
+  else if (message->equals("ENGAGE"))
+  {
+    engageMotors();
+    s_SerialMessaging.Println("ONLINE");
+    test[AZ_MOTOR] = false;
+    test[AL_MOTOR] = false;
+    resetMotorSpeed();
+  }
+  else if (message->equals("AZTEST"))
+  {
+	startTest(message, AZ_MOTOR);
+  }
+  else if (message->equals("ALTEST"))
+  {
+	startTest(message, AL_MOTOR);
+  }
+  else if (message->startsWith("TS"))
+  {
+	setTestSpeed(message);
   }
   else if (message->startsWith("AZP"))
   {
-    long positionInHundrethsDegrees = getNumeric(message, 3, 8);
-
-    long positionInSteps = hundrethDegreesToSteps(positionInHundrethsDegrees, AZ_MOTOR);
-
-    s_SerialMessaging.Print("Setting new azimuth ");
-    s_SerialMessaging.Print(positionInHundrethsDegrees);
-    s_SerialMessaging.Print(" = ");
-    s_SerialMessaging.Print(positionInSteps);
-    s_SerialMessaging.Println(" steps");
-    azimuthStepper.setCurrentPosition(positionInSteps);
+	setCurrentMotorPosition(message, AZ_MOTOR);
   }
   else if (message->startsWith("ALP"))
   {
-    long positionInHundrethsDegrees = 0;
-    if(message->startsWith("ALP-"))
-    {
-      positionInHundrethsDegrees = getNumeric(message, 3, 9);
-    }
-    else
-    {
-      positionInHundrethsDegrees = getNumeric(message, 3, 8);
-    }
-    
-    long positionInSteps = hundrethDegreesToSteps(positionInHundrethsDegrees, AL_MOTOR);
-
-    s_SerialMessaging.Print("Setting new altitude ");
-    s_SerialMessaging.Print(positionInHundrethsDegrees);
-    s_SerialMessaging.Print(" = ");
-    s_SerialMessaging.Print(positionInSteps);
-    s_SerialMessaging.Println(" steps");
-    altitudeStepper.setCurrentPosition(positionInSteps);
+    setCurrentMotorPosition(message, AL_MOTOR);
+  }
+  else if message->startsWith("ALS")
+  {
+    setTargetSpeed(message, AL_MOTOR);
+  }
+  else if message->startsWith("AZS")
+  {
+    setTargetSpeed(message, AZ_MOTOR);
   }
   else if (message->equals("RSTP"))
   {
@@ -352,8 +395,8 @@ static void resetMotorPosition(void)
 
 static void resetMotorSpeed(void)
 {
-  azimuthStepper.setMaxSpeed(500.0f);
-  altitudeStepper.setMaxSpeed(200.0f);
+  azimuthStepper.setMaxSpeed( maxSpeeds[AZ_MOTOR] );
+  altitudeStepper.setMaxSpeed( maxSpeeds[AL_MOTOR] );
 
   azimuthStepper.setSpeed(runSpeedStepsPerSecond);
   altitudeStepper.setSpeed(runSpeedStepsPerSecond);
