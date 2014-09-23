@@ -19,9 +19,9 @@ class TLEParserError(Exception):
         
 class TLEParser:
     
-    def __init__(self, observer_latlong, observer_elevation, tle):
+    def __init__(self, observer, tle):
         self.setNewTLE(tle)
-        self.setNewObserver(observer_latlong, observer_elevation)
+        self.setNewObserver(observer)
 
         self.oldLocation = Location(0,0)
         self.currentLocation = Location(0,0)
@@ -35,12 +35,12 @@ class TLEParser:
         data = tle.getTLE()
         self.sat = ephem.readtle(data[0], data[1], data[2])
 
-    def setNewObserver(self, observer_latlong, observer_elevation):
+    def setNewObserver(self, observer):
         
         self.observer = ephem.Observer()
-        self.observer.lon = observer_latlong[0]
-        self.observer.lat = observer_latlong[1]
-        self.observer.elevation = observer_elevation
+        self.observer.lon = observer.lat
+        self.observer.lat = observer.long
+        self.observer.elevation = observer.alt
         
     def getAzimuth(self, degrees = True):
         if (degrees):

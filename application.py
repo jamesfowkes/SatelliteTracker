@@ -9,11 +9,8 @@ from TLEProvider import TLEProvider
 from TLEParser import TLEParser
 from Tracker import Tracker
 
-NOTTM_LONLAT = ('1.13', '52.95')
-NOTTM_ELEVATION = 80
+import Location
 
-BLETCHLEY_LONLAT = ('0.767', '51.97')
-BLETCHLEY_ELEVATION = 80
 
 def get_arg_parser():
     """ Return a command line argument parser for this module """
@@ -39,6 +36,10 @@ def get_arg_parser():
     arg_parser.add_argument(
         '--al', dest='altitude', default='-90',
         help="The starting altitude of the tracker")
+    
+    arg_parser.add_argument(
+        '--loc', dest='location', default='Nottingham',
+        help="The location of the tracker on Earth")
         
     return arg_parser
    
@@ -74,7 +75,9 @@ def main():
     
     tle, tleProvider = tryToGetTLE(args.tle)
 
-    tleParser = TLEParser(NOTTM_LONLAT, NOTTM_ELEVATION, tle)
+    location = Location.getLocation(args.location)
+    
+    tleParser = TLEParser(location, tle)
     motorControl = ArduinoHardware(args.port, args.baudrate, True)
     
     tracker = Tracker(tleProvider, tleParser, motorControl)
