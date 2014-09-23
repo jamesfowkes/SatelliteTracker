@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 
 import TLE
 import ephem
+import logging
 
 class Location:
 
@@ -25,7 +26,10 @@ class TLEParser:
         self.oldLocation = Location(0,0)
         self.currentLocation = Location(0,0)
         self.futureLocation = Location(0,0)
-
+        
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.INFO)
+        
     def setNewTLE(self, tle):
         self.tle = tle
         data = tle.getTLE()

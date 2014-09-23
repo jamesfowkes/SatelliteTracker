@@ -5,6 +5,8 @@ import sys
 
 import time
 
+import logging
+
 STATE_UNKNOWN = 0
 STATE_IDLE = 1
 STATE_ONLINE = 2
@@ -22,24 +24,28 @@ class ArduinoHardware(HardwareInterface):
         
         self.state = STATE_UNKNOWN
         self.echoArduino = echo
-    
+        self.updateExpected = True ## Expect a message from the Arduino at boot
+        
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.INFO)
+        
     def SetAzSpeed(self, dps):
-        print("Setting azimuth speed to %f dps" % dps)
+        self.logger.info("Setting azimuth speed to %f dps" % dps)
         string = "AZS%05d\n" % (dps * 100)
         self.outstream.write(string)
         
     def SetAlSpeed(self, dps):
-        print("Setting altitude speed to %f dps" % dps)
+        self.logger.info("Setting altitude speed to %f dps" % dps)
         string = "ALS%05d\n" % (dps * 100)
         self.outstream.write(string)
     
     def SetTargetAzimuth(self, az):
-        print("Sending target azimuth %f" % az)
+        self.logger.info("Sending target azimuth %f" % az)
         string = "AZ%05d\n" % (az * 100)
         self.outstream.write(string)
         
     def SetTargetAltitude(self, al):
-        print("Sending target altitude %f" % al)
+        self.logger.info("Sending target altitude %f" % al)
         string = "AL%05d\n" % (al * 100)
         self.outstream.write(string)
                
@@ -48,28 +54,39 @@ class ArduinoHardware(HardwareInterface):
         return self.state != STATE_UNKNOWN
         
     def Update(self):
-        line = self.instream.readline()
+    
+        if self.updateExpected:
         
-        if self.echoArduino:
-            print("(Got '%s')" % line.rstrip())
+            ## Assume we got a valid reply
+            self.updateExpected = False
             
-        if self.state == STATE_UNKNOWN:
-            if line.startswith("OFFLINE"):
-                print ("Arduino ready.")
-                self.state = STATE_IDLE
-        
-        if self.state == STATE_IDLE:
-            if line.startswith("ONLINE"):
-                print("Motors powered.")
-                self.state = STATE_ONLINE
-        
-        if self.state == STATE_ONLINE:
-            if line.startswith("OFFLINE"):
-                print("Motors unpowered.")
-                self.state = STATE_IDLE
+            line = self.instream.readline()
             
+            if self.echoArduino:
+                self.logger.info("(Got '%s')" % line.rstrip())
+                
+            if self.state == STATE_UNKNOWN:
+                if line.startswith("OFFLINE"):
+                    self.logger.info ("Arduino ready.")
+                    self.state = STATE_IDLE
+            
+            elif self.state == STATE_IDLE:
+                if line.startswith("ONLINE"):
+                    self.logger.info("Motors powered.")
+                    self.state = STATE_ONLINE
+            
+            elif self.state == STATE_ONLINE:
+                if line.startswith("OFFLINE"):
+                    self.logger.info("Motors unpowered.")
+                    self.state = STATE_IDLE
+            else:
+                self.logger.info("Unexpected reply '%s' in state %d" % (line.rstrip(), self.state))
+                self.updateExpected = True
+                
     def Start(self):
+        self.logger.info("Requesting start")
         self.outstream.write("ENGAGE\n")
+        self.updateExpected = True
         
     def Stop(self):
         self.instream.close()

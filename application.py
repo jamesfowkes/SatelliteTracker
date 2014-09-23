@@ -1,6 +1,7 @@
 import math
 import sys
 import argparse
+import logging
 
 from ArduinoHardware import ArduinoHardware
 
@@ -42,23 +43,31 @@ def get_arg_parser():
     return arg_parser
    
 def tryToGetTLE(tleName):
-    
+
     tleProvider = TLEProvider("TLE")
       
     tle = tleProvider.GetTLEByName(tleName)
 
     if tle is None:
-        print("Could not get TLE by name '%s'. Trying default ID of 25544 (ISS)." % tleName)
+        moduleLogger().info("Could not get TLE by name '%s'. Trying default ID of 25544 (ISS)." % tleName)
         tle = tleProvider.GetTLEByID(25544)
     else:
-        print("Found TLE with name '%s'." % tleName)
+        moduleLogger().info("Found TLE with name '%s'." % tleName)
 
     if tle is None:
-        sys.exit("TLE could not be found.")
+        moduleLogger().error("No valid TLE could not be found.")
+        sys.exit("No valid TLE could not be found.")
         
     return tle, tleProvider
+
+def moduleLogger():
+    return logging.getLogger(__name__)
     
 def main():
+
+    logging.basicConfig(level=logging.INFO)
+    
+    moduleLogger().setLevel(logging.INFO)
     
     arg_parser = get_arg_parser()
     args = arg_parser.parse_args()

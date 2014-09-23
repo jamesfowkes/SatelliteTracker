@@ -2,6 +2,8 @@ from HardwareInterface import HardwareInterface
 from task import TaskHandler
 from time import sleep
 
+import logging
+
 class Tracker:
     
     def __init__(self, tleProvider, tleParser, hw):
@@ -9,6 +11,9 @@ class Tracker:
         self.tleProvider = tleProvider
         self.task_handler = TaskHandler(self)
         self.task = self.task_handler.add_function(self.updateTask, 100, False)
+        
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.INFO)
         
         self.hw = hw
         
@@ -30,7 +35,7 @@ class Tracker:
     def updateTask(self):
         try:
             if self.tleProvider.RefreshTLE(self.tleParser.tle) == False:
-                print("Warning: TLE failed to refresh")
+                self.logger.warn("Warning: TLE failed to refresh")
                       
             self.tleParser.update()
             
