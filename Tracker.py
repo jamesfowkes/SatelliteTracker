@@ -54,15 +54,15 @@ class Tracker:
         """
 
         try:
-            if self.tle_provider.RefreshTLE(self.tle_parser.tle) == False:
+            if self.tle_provider.refresh_tle(self.tle_parser.tle) == False:
                 self.logger.warn("Warning: TLE failed to refresh")
 
             self.tle_parser.update()
 
-            self.hardware.set_az_speed(self.tle_parser.azimuthSpeed())
-            self.hardware.set_al_speed(self.tle_parser.altitudeSpeed())
-            self.hardware.set_target_azimuth(self.tle_parser.getAzimuth())
-            self.hardware.set_target_altitude(self.tle_parser.getAltitude())
+            self.hardware.set_az_speed(self.tle_parser.azimuth_speed())
+            self.hardware.set_al_speed(self.tle_parser.altitude_speed())
+            self.hardware.set_target_azimuth(self.tle_parser.get_azimuth())
+            self.hardware.set_target_altitude(self.tle_parser.get_altitude())
 
             self.hardware.update()
 

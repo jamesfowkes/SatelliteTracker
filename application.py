@@ -1,5 +1,5 @@
 """
-application.py
+Application.py
 
 @author: James Fowkes
 
@@ -55,11 +55,11 @@ def try_to_get_tle(tle_name):
     """ Attempt to get the TLE for the provided satellite name """
     tle_provider = TLEProvider("TLE")
 
-    tle = tle_provider.GetTLEByName(tle_name)
+    tle = tle_provider.get_local_tle_by_name(tle_name)
 
     if tle is None:
         get_module_logger().info("Could not get TLE by name '%s'. Trying default ID of 25544 (ISS).", tle_name)
-        tle = tle_provider.GetTLEByID(25544)
+        tle = tle_provider.get_tle_by_id(25544)
     else:
         get_module_logger().info("Found TLE with name '%s'.", tle_name)
 
@@ -87,7 +87,7 @@ def main():
 
     tle, tle_provider = try_to_get_tle(args.tle)
 
-    location = Location.getLocation(args.location)
+    location = Location.get_location(args.location)
 
     tle_parser = TLEParser(location, tle)
     motor_control = ArduinoHardware(args.port, args.baudrate, True)
