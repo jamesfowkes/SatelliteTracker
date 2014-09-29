@@ -1,4 +1,4 @@
-class HardwareInterface:
+class IHardware:
     def __init__(self):
         pass
     

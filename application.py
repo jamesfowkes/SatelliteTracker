@@ -94,7 +94,7 @@ def main():
 
     tracker = Tracker(tle_provider, tle_parser, motor_control)
 
-    tracker.Run(int(args.azimuth), int(args.altitude))
+    tracker.run(int(args.azimuth), int(args.altitude))
 
 if __name__ == "__main__":
     main()
