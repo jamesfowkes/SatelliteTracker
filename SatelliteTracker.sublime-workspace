@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"an",
+				"angularSpeed"
+			],
+			[
 				"m_",
 				"m_magnitude"
 			],
@@ -175,6 +179,88 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "Tracker/Tracker.py",
+			"settings":
+			{
+				"buffer_size": 1292,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "modeller.py",
+			"settings":
+			{
+				"buffer_size": 3885,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "TLE/TLEParser.py",
+			"settings":
+			{
+				"buffer_size": 2312,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Position/position.py",
+			"settings":
+			{
+				"buffer_size": 901,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "angle_helper.py",
+			"settings":
+			{
+				"buffer_size": 3396,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": ".gitignore",
+			"settings":
+			{
+				"buffer_size": 103,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "Searching 38 files for \"<<<<<<<\" (case sensitive)\n\n/home/james/Documents/Code/SatelliteTracker/application.py:\n   17  from Tracker import Tracker\n   18  \n   19: <<<<<<< HEAD\n   20  =======\n   21  import Location\n   ..\n   26      \"\"\" Return a command line argument parser for this module \"\"\"\n   27      arg_parser = argparse.ArgumentParser(\n   28: <<<<<<< HEAD\n   29          description='TLE Tracker Application for sending azimuth, altitude strings to hardware')\n   30  =======\n   ..\n   52          help=\"The starting altitude of the tracker\")\n   53  \n   54: <<<<<<< HEAD\n   55      return arg_parser\n   56  \n   ..\n   86  \n   87      if tle is None:\n   88: <<<<<<< HEAD\n   89          sys.exit(\"TLE could not be found.\")\n   90  \n\n/home/james/Documents/Code/SatelliteTracker/TLE/TLE.py:\n   20          self.line1 = line1\n   21          self.line2 = line2\n   22: <<<<<<< HEAD:TLE/TLE.py\n   23          self.name = self.idLine\n   24  =======\n   ..\n   33              self.line1 = tle.line1\n   34              self.line2 = tle.line2\n   35: <<<<<<< HEAD:TLE/TLE.py\n   36              self.lastUpdate = datetime.datetime.now()\n   37  \n\n/home/james/Documents/Code/SatelliteTracker/TLE/TLEProvider.py:\n    8  \n    9  import os\n   10: <<<<<<< HEAD:TLE/TLEProvider.py\n   11  import sys\n   12  \n   ..\n   19  \n   20  class TLEProvider:\n   21: <<<<<<< HEAD:TLE/TLEProvider.py\n   22  \n   23      def __init__(self, tleDirectory):\n   ..\n   45                      self.add_tle_from_file(tle_directory+\"/\"+file)\n   46          except FileNotFoundError:\n   47: <<<<<<< HEAD:TLE/TLEProvider.py\n   48              os.mkdir(tleDirectory)\n   49  \n   ..\n   63              raise\n   64  \n   65: <<<<<<< HEAD:TLE/TLEProvider.py\n   66          tleFile.close()\n   67  \n   ..\n  133          return tle\n  134  \n  135: <<<<<<< HEAD:TLE/TLEProvider.py\n  136      def refreshTLE(self, tle):\n  137  =======\n  ...\n  151          return success\n  152  \n  153: <<<<<<< HEAD:TLE/TLEProvider.py\n  154      def listTLEs(self, stream=sys.stdout):\n  155          for tle in self.tles:\n\n12 matches across 3 files\n\n\nSearching 38 files for \"<<<<<<<\" (case sensitive)\n\n/home/james/Documents/Code/SatelliteTracker/TLE/TLE.py:\n   20          self.line1 = line1\n   21          self.line2 = line2\n   22: <<<<<<< HEAD:TLE/TLE.py\n   23          self.name = self.idLine\n   24  =======\n   ..\n   33              self.line1 = tle.line1\n   34              self.line2 = tle.line2\n   35: <<<<<<< HEAD:TLE/TLE.py\n   36              self.lastUpdate = datetime.datetime.now()\n   37  \n\n/home/james/Documents/Code/SatelliteTracker/TLE/TLEProvider.py:\n    8  \n    9  import os\n   10: <<<<<<< HEAD:TLE/TLEProvider.py\n   11  import sys\n   12  \n   ..\n   19  \n   20  class TLEProvider:\n   21: <<<<<<< HEAD:TLE/TLEProvider.py\n   22  \n   23      def __init__(self, tleDirectory):\n   ..\n   45                      self.add_tle_from_file(tle_directory+\"/\"+file)\n   46          except FileNotFoundError:\n   47: <<<<<<< HEAD:TLE/TLEProvider.py\n   48              os.mkdir(tleDirectory)\n   49  \n   ..\n   63              raise\n   64  \n   65: <<<<<<< HEAD:TLE/TLEProvider.py\n   66          tleFile.close()\n   67  \n   ..\n  133          return tle\n  134  \n  135: <<<<<<< HEAD:TLE/TLEProvider.py\n  136      def refreshTLE(self, tle):\n  137  =======\n  ...\n  151          return success\n  152  \n  153: <<<<<<< HEAD:TLE/TLEProvider.py\n  154      def listTLEs(self, stream=sys.stdout):\n  155          for tle in self.tles:\n\n8 matches across 2 files\n\n\nSearching 38 files for \"<<<<<<<\" (case sensitive)\n\n/home/james/Documents/Code/SatelliteTracker/TLE/TLEProvider.py:\n    8  \n    9  import os\n   10: <<<<<<< HEAD:TLE/TLEProvider.py\n   11  import sys\n   12  \n   ..\n   19  \n   20  class TLEProvider:\n   21: <<<<<<< HEAD:TLE/TLEProvider.py\n   22  \n   23      def __init__(self, tleDirectory):\n   ..\n   45                      self.add_tle_from_file(tle_directory+\"/\"+file)\n   46          except FileNotFoundError:\n   47: <<<<<<< HEAD:TLE/TLEProvider.py\n   48              os.mkdir(tleDirectory)\n   49  \n   ..\n   63              raise\n   64  \n   65: <<<<<<< HEAD:TLE/TLEProvider.py\n   66          tleFile.close()\n   67  \n   ..\n  133          return tle\n  134  \n  135: <<<<<<< HEAD:TLE/TLEProvider.py\n  136      def refreshTLE(self, tle):\n  137  =======\n  ...\n  151          return success\n  152  \n  153: <<<<<<< HEAD:TLE/TLEProvider.py\n  154      def listTLEs(self, stream=sys.stdout):\n  155          for tle in self.tles:\n\n6 matches in 1 file\n",
+			"settings":
+			{
+				"buffer_size": 4456,
+				"line_ending": "Unix",
+				"name": "Find Results",
+				"scratch": true
+			}
+		},
+		{
+			"file": "TLE/TLEProvider.py",
+			"settings":
+			{
+				"buffer_size": 5004,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "TLE/TLE.py",
+			"settings":
+			{
+				"buffer_size": 2626,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "application.py",
+			"settings":
+			{
+				"buffer_size": 2558,
+				"line_ending": "Unix"
+			}
+		}
 	],
 	"build_system": "",
 	"command_palette":
@@ -200,16 +286,16 @@
 	},
 	"file_history":
 	[
+		"/home/james/Documents/Code/SatelliteTracker/simple_pyephem_test.py",
+		"/home/james/Documents/Code/SatelliteTracker/Location/location.py",
+		"/home/james/Documents/Code/SatelliteTracker/Position/position.py",
 		"/home/james/Documents/Code/SatelliteTracker/modeller.py",
 		"/home/james/Documents/Code/SatelliteTracker/angle_helper.py",
 		"/home/james/Documents/Code/SatelliteTracker/TLE/TLEProvider.py",
 		"/home/james/Documents/Code/SatelliteTracker/Tracker/Tracker.py",
 		"/home/james/Documents/Code/SatelliteTracker/TLE/TLEParser.py",
-		"/home/james/Documents/Code/SatelliteTracker/Position/position.py",
 		"/home/james/Documents/Code/SatelliteTracker/Arduino/SatelliteTracker/controller.h",
 		"/home/james/Documents/Code/SatelliteTracker/Arduino/SatelliteTracker/controller.cpp",
-		"/home/james/Documents/Code/SatelliteTracker/simple_pyephem_test.py",
-		"/home/james/Documents/Code/SatelliteTracker/Location/location.py",
 		"/home/james/Documents/Code/SatelliteTracker/TLE/ISS.tle",
 		"/home/james/Documents/Code/SatelliteTracker/TLE/TLE.py",
 		"/home/james/Documents/Code/SatelliteTracker/application.py",
@@ -303,7 +389,7 @@
 	},
 	"find_in_files":
 	{
-		"height": 0.0,
+		"height": 90.0,
 		"where_history":
 		[
 			"-env/",
@@ -317,6 +403,7 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"<<<<<<<",
 			"leading",
 			"target",
 			" = Position(0);",
@@ -443,8 +530,7 @@
 			"endOfFile",
 			"ReadLineWithReadFunction",
 			"readOneByteFromFile",
-			"FileExists",
-			"print"
+			"FileExists"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -464,8 +550,403 @@
 	"groups":
 	[
 		{
+			"selected": 7,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "Tracker/Tracker.py",
+					"settings":
+					{
+						"buffer_size": 1292,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "modeller.py",
+					"settings":
+					{
+						"buffer_size": 3885,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 405.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "TLE/TLEParser.py",
+					"settings":
+					{
+						"buffer_size": 2312,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1613,
+								1613
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 630.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "Position/position.py",
+					"settings":
+					{
+						"buffer_size": 901,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								854,
+								854
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "angle_helper.py",
+					"settings":
+					{
+						"buffer_size": 3396,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1099,
+								1099
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 495.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": ".gitignore",
+					"settings":
+					{
+						"buffer_size": 103,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								47,
+								47
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"settings":
+					{
+						"buffer_size": 4456,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										161,
+										168
+									],
+									[
+										347,
+										354
+									],
+									[
+										560,
+										567
+									],
+									[
+										658,
+										665
+									],
+									[
+										862,
+										869
+									],
+									[
+										1037,
+										1044
+									],
+									[
+										1227,
+										1234
+									],
+									[
+										1332,
+										1339
+									],
+									[
+										1545,
+										1552
+									],
+									[
+										1673,
+										1680
+									],
+									[
+										1791,
+										1798
+									],
+									[
+										1927,
+										1934
+									],
+									[
+										2257,
+										2264
+									],
+									[
+										2432,
+										2439
+									],
+									[
+										2622,
+										2629
+									],
+									[
+										2727,
+										2734
+									],
+									[
+										2940,
+										2947
+									],
+									[
+										3068,
+										3075
+									],
+									[
+										3186,
+										3193
+									],
+									[
+										3322,
+										3329
+									],
+									[
+										3616,
+										3623
+									],
+									[
+										3721,
+										3728
+									],
+									[
+										3934,
+										3941
+									],
+									[
+										4062,
+										4069
+									],
+									[
+										4180,
+										4187
+									],
+									[
+										4316,
+										4323
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								3618,
+								3618
+							]
+						],
+						"settings":
+						{
+							"detect_indentation": false,
+							"output_tag": 3,
+							"result_base_dir": "",
+							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2010.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "TLE/TLEProvider.py",
+					"settings":
+					{
+						"buffer_size": 5004,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								131,
+								131
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 135.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "TLE/TLE.py",
+					"settings":
+					{
+						"buffer_size": 2626,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2625,
+								2625
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "application.py",
+					"settings":
+					{
+						"buffer_size": 2558,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2518,
+								2518
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 810.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
 			]
 		}
 	],

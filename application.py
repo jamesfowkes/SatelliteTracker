@@ -1,6 +1,14 @@
-import math
+"""
+Application.py
+
+@author: James Fowkes
+
+Entry file for the satellite tracker application
+"""
+
 import sys
 import argparse
+import logging
 
 from ArduinoHardware import ArduinoHardware
 
@@ -8,6 +16,7 @@ from TLEProvider import TLEProvider
 from TLEParser import TLEParser
 from Tracker import Tracker
 
+import Location
 
 def get_arg_parser():
     """ Return a command line argument parser for this module """
@@ -34,38 +43,56 @@ def get_arg_parser():
         '--al', dest='altitude', default='-90',
         help="The starting altitude of the tracker")
 
+    arg_parser.add_argument(
+        '--loc', dest='location', default='Nottingham',
+        help="The location of the tracker on Earth")
+
     return arg_parser
 
-def tryToGetTLE(tleName):
+def try_to_get_tle(tle_name):
 
-    tleProvider = TLEProvider("TLE")
+    """ Attempt to get the TLE for the provided satellite name """
+    tle_provider = TLEProvider("TLE")
 
-    tle = tleProvider.getTLEByName(tleName)
+    tle = tle_provider.get_local_tle_by_name(tle_name)
 
     if tle is None:
-        print("Could not get TLE by name '%s'. Trying default ID of 25544 (ISS)." % tleName)
-        tle = tleProvider.getTLEByID(25544)
+        get_module_logger().info("Could not get TLE by name '%s'. Trying default ID of 25544 (ISS).", tle_name)
+        tle = tle_provider.get_tle_by_id(25544)
     else:
-        print("Found TLE with name '%s'." % tleName)
+        get_module_logger().info("Found TLE with name '%s'.", tle_name)
 
     if tle is None:
         sys.exit("TLE could not be found.")
 
     return tle, tleProvider
 
+def get_module_logger():
+
+    """ Returns logger for this module """
+    return logging.getLogger(__name__)
+
 def main():
+
+    """ Application start """
+
+    logging.basicConfig(level=logging.INFO)
+
+    get_module_logger().setLevel(logging.INFO)
 
     arg_parser = get_arg_parser()
     args = arg_parser.parse_args()
 
-    tle, tleProvider = tryToGetTLE(args.tle)
+    tle, tle_provider = try_to_get_tle(args.tle)
 
-    tleParser = TLEParser(NOTTM_LONLAT, NOTTM_ELEVATION, tle)
-    motorControl = ArduinoHardware(args.port, args.baudrate, True)
+    location = Location.get_location(args.location)
 
-    tracker = Tracker(tleProvider, tleParser, motorControl)
+    tle_parser = TLEParser(location, tle)
+    motor_control = ArduinoHardware(args.port, args.baudrate, True)
 
-    tracker.Run(int(args.azimuth), int(args.altitude))
+    tracker = Tracker(tle_provider, tle_parser, motor_control)
+
+    tracker.run(int(args.azimuth), int(args.altitude))
 
 if __name__ == "__main__":
     main()

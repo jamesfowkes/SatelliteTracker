@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
 /* Utility Libraries */
-#include <util_angle.h>
+#include "util_angle.h"
 
 /* Application Includes */
 #include "MachineIf.h"
@@ -21,7 +21,7 @@ void translateMoveRequest(long * pAzimuth, long * pAltitude)
   }
 #elif MACHINE_ID == 2
   // Do nothing: full 360-degree rotation in both planes
-#elif MACHINE_ID == 2
+#elif MACHINE_ID == 3
   // TODO
 #endif
 

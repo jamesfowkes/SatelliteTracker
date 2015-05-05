@@ -1,57 +1,77 @@
+"""
+TLE.py
+
+@author: James Fowkes
+
+Handles a single TLE
+"""
+
 import datetime
 import time
-import os
 
 class TLE:
+    """
+    Initialises TLE from three lines and the last time it was updated.
+    """
 
-    def __init__(self, lastUpdate, idLine, line1, line2):
-        self.lastUpdate = lastUpdate
-        self.idLine = idLine
+    def __init__(self, last_update, id_line, line1, line2):
+        self.last_update = last_update
+        self.id_line = id_line
         self.line1 = line1
         self.line2 = line2
         self.name = self.idLine
         self.norad_id = self.line2[2:7]
-        self.updateIntervalSeconds = 2 * 60 * 60 #Default update interval is two hours
+        self.update_interval_seconds = 2 * 60 * 60 #Default update interval is two hours
 
-    def updateFromOtherTLE(self, tle):
-        if self.idLine == tle.idLine:
+    def update_from_other_tle(self, tle):
+        """ Change the TLE data """
+        if self.id_line == tle.id_line:
             self.line1 = tle.line1
             self.line2 = tle.line2
-            self.lastUpdate = datetime.datetime.now()
+            self.last_update = datetime.datetime.now()
 
     @classmethod
     def read(cls, stream_object):
+        """ Return a TLE object from reading a stream (probably a text file)
+        Assumes that the first line of the file contains the last update time """
+        tle_data = stream_object.read().splitlines()
 
-        tleData = stream_object.read().splitlines()
+        last_update = datetime.datetime.fromtimestamp(int(tle_data[0]))
+        id_line = tle_data[1].decode('utf-8')
+        line1 = tle_data[2].decode('utf-8')
+        line2 = tle_data[3].decode('utf-8')
 
-        lastUpdate = datetime.datetime.fromtimestamp(int(tleData[0]))
-        idLine = tleData[1].decode('utf-8')
-        line1 = tleData[2].decode('utf-8')
-        line2 = tleData[3].decode('utf-8')
-
-        return cls(lastUpdate, idLine, line1, line2)
+        return cls(last_update, id_line, line1, line2)
 
     def write(self, stream_object):
-        stream_object.write( str(int(time.time())) + '\n')
-        stream_object.write( self.idLine + '\n')
-        stream_object.write( self.line1 + '\n')
-        stream_object.write( self.line2 + '\n')
+        """ Writes the current TLE object to stream """
+        stream_object.write(str(int(time.time())) + '\n')
+        stream_object.write(self.id_line + '\n')
+        stream_object.write(self.line1 + '\n')
+        stream_object.write(self.line2 + '\n')
 
-    def setUpdateIntervalSeconds(self, newInterval):
-        self.updateIntervalSeconds = newInterval
+    def set_update_interval_seconds(self, new_interval):
+        """ Set how often this TLE should be updated from SpaceTrack """
+        self.update_interval_seconds = new_interval
 
-    def setUpdateIntervalMinutes(self, newInterval):
-        self.updateIntervalSeconds = newInterval * 60
+    def set_update_interval_minutes(self, new_interval):
+        """ Set how often this TLE should be updated from SpaceTrack """
+        self.update_interval_seconds = new_interval * 60
 
-    def getTLE(self):
-        return [self.idLine, self.line1, self.line2]
+    def get_tle(self):
+        """ Return the three data lines as an array """
+        return [self.id_line, self.line1, self.line2]
 
-    def matchID(self, id):
-        return self.norad_id == id
+    def match_id(self, norad_id):
+        """ Match this TLE based on NORAD ID """
+        return self.norad_id == norad_id
 
-    def matchName(self, name):
+    def match_name(self, name):
+        """ Match this TLE based on name """
         return name in self.name
 
-    def isOld(self):
-        secondsSinceLastUpdate = (datetime.datetime.now() - self.lastUpdate).total_seconds()
-        return (secondsSinceLastUpdate > (self.updateIntervalSeconds ))
+    def is_old(self):
+        """ Return True if the TLE is considered 'old', based on given update interval """
+        seconds_since_last_update = (datetime.datetime.now() - self.last_update).total_seconds()
+        return seconds_since_last_update > (self.update_interval_seconds)
+

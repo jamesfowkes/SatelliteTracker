@@ -1,83 +1,106 @@
+"""
+TLEParser.py
+
+@author: James Fowkes
+"""
+
 import math
-import time
 from datetime import datetime, timedelta
 
-import TLE
 import ephem
+import logging
 
 import unittest
 
 from angle_helper import angleDiff
 
 class Location:
-
-    def __init__(self, az, al):
-        self.az = az
-        self.al = al
+    """ Small class to store the relative location of an object """
+     #pylint: disable=too-few-public-methods
+    def __init__(self, az, al):  #pylint: disable=invalid-name
+        self.az = az #pylint: disable=invalid-name
+        self.al = al #pylint: disable=invalid-name
 
 class TLEParserError(Exception):
+    """ Exception class to raise on an TLE parse error """
+    #pylint: disable=super-init-not-called
     def __init__(self, expr, msg):
         self.expr = expr
         self.msg = msg
 
 class TLEParser:
+    """ Main parser class. Is passed a TLE object and an
+    observer and provides Locations for the TLE object """
+    def __init__(self, observer, tle):
+        self.sat = None
+        self.tle = None
+        self.observer = ephem.Observer()
+        self.set_new_tle(tle)
+        self.set_new_observer(observer)
 
-    def __init__(self, observer_latlong, observer_elevation, tle):
-        self.setNewTLE(tle)
-        self.setNewObserver(observer_latlong, observer_elevation)
+        self.old_location = Location(0, 0)
+        self.current_location = Location(0, 0)
+        self.future_location = Location(0, 0)
 
-        self.oldLocation = Location(0,0)
-        self.currentLocation = Location(0,0)
-        self.futureLocation = Location(0,0)
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(logging.INFO)
 
-    def setNewTLE(self, tle):
+    def set_new_tle(self, tle):
+        """ Changes TLE and resets the sat member from the ephem module """
         self.tle = tle
-        data = tle.getTLE()
+        data = tle.get_tle()
         self.sat = ephem.readtle(data[0], data[1], data[2])
 
-    def setNewObserver(self, observer_latlong, observer_elevation):
-
+    def set_new_observer(self, observer):
+        """ Changes the observer """
         self.observer = ephem.Observer()
-        self.observer.lon = observer_latlong[0]
-        self.observer.lat = observer_latlong[1]
-        self.observer.elevation = observer_elevation
+        self.observer.lat = observer.lat
+        self.observer.lon = observer.long
+        self.observer.elevation = observer.alt
 
-    def getAzimuth(self, degrees = True):
-        if (degrees):
-            return math.degrees(self.currentLocation.az)
+    def get_azimuth(self, degrees=True):
+        """ Returns the current azimuth of the tracked object """
+        if degrees:
+            return math.degrees(self.current_location.az)
         else:
-            return self.currentLocation.az
+            return self.current_location.az
 
-    def getAltitude(self, degrees = True):
-        if (degrees):
-            return math.degrees(self.currentLocation.al)
+    def get_altitude(self, degrees=True):
+        """ Returns the current altitude of the tracked object """
+        if degrees:
+            return math.degrees(self.current_location.al)
         else:
-            return self.currentLocation.al
+            return self.current_location.al
 
-    def azimuthSpeed(self, degrees = True):
+    def azimuth_speed(self, degrees = True):
+        """ Returns the speed of the azimuth across the sky (in degrees per second) """
         return self.angularSpeed(self.futureLocation.az, self.oldLocation.az)
 
-    def altitudeSpeed(self, degrees = True):
+    def altitude_speed(self, degrees = True):
+        """ Returns the speed of the altitude across the sky (in degrees per second) """
         return self.angularSpeed(self.futureLocation.al, self.oldLocation.al)
 
     @staticmethod
     def angularSpeed(a, b, degrees = True):
         return angleDiff(a, b, degrees) / 2
 
-    def updateLocation(self, loc, dt):
+    def update_location(self, loc, dt): #pylint: disable=invalid-name
+        """ Calls the compute method on the currently tracked object
+        using the provided datetime """
         self.observer.date = dt
         self.sat.compute(self.observer)
         loc.az = float(self.sat.az)
         loc.al = float(self.sat.alt)
 
-    def update(self, dt = None):
+    def update(self, dt=None): #pylint: disable=invalid-name
 
+        """ Recalculates position and speed for the provided datetime """
         if dt is None:
             dt = datetime.utcnow()
 
-        self.updateLocation(self.oldLocation, dt - timedelta(seconds = 1))
-        self.updateLocation(self.currentLocation, dt)
-        self.updateLocation(self.futureLocation, dt + timedelta(seconds = 1))
+        self.update_location(self.old_location, dt - timedelta(seconds=1))
+        self.update_location(self.current_location, dt)
+        self.update_location(self.future_location, dt + timedelta(seconds=1))
 
 if __name__ == "__main__":
 
