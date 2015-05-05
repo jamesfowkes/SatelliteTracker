@@ -1,5 +1,10 @@
-## Compiled Python Files
+## Compiled Python/Arduino Files
 *.pyc
+*.o
+*.d
 
 ## Two-Line Element files
-TLE/*
+TLE/*.tle
+
+## Virtualenv
+env/
