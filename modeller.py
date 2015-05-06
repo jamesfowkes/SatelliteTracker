@@ -5,7 +5,7 @@ from angle_helper import anglesBridgeZero, RADIANS_PER_TURN
 
 from TLE import TLEProvider
 from TLE import TLEParser
-from Location.location import Location
+from Observer import get_observer
 
 SPACING_DEGREES = 2
 SPACING_RADIANS = math.radians(SPACING_DEGREES)
@@ -48,11 +48,11 @@ class Model:
 
     def tick(self, t):
         self.tle.update()
-        self.targetRelativePosition.set( self.tle.getAzimuth(False) )
+        self.targetRelativePosition.set( self.tle.get_azimuth(False) )
         self.estimatedPosition.add( -self.speed * t ) ## Speed is +ve going anti-clockwise
         self.error.update(self.targetRelativePosition.get(), self.estimatedPosition.get())
 
-        self.targetRelativeSpeed = self.tle.azimuthSpeed(False)
+        self.targetRelativeSpeed = self.tle.azimuth_speed(False)
         self.setNewSpeed()
 
     def fractionalError(self):
@@ -110,11 +110,10 @@ class Model:
 if __name__ == "__main__":
 
     tleProvider = TLEProvider.TLEProvider("TLE")
-    tle = tleProvider.getTLEByName("ISS (ZARYA)")
+    tle = tleProvider.get_local_tle_by_name("ISS (ZARYA)")
 
     tleParser = TLEParser.TLEParser(
-        Location.getLonLat("Nottingham"),
-        Location.getElevation("Nottingham"),
+        get_observer("Nottingham"),
         tle)
 
     model = Model(tleParser, RADIANS_PER_TURN/60)

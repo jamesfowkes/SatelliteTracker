@@ -10,6 +10,7 @@ Provides location information for points on Earth
 #pylint: disable=too-few-public-methods
 
 import logging
+import ephem
 
 class Location:
 
@@ -26,7 +27,7 @@ LOCATIONS = {
     "Bletchley" : Location('0.767', '51.97', 80)
 }
 
-def get_location(index):
+def get_observer(key):
 
     """
     Return the Location object for the requested location,
@@ -38,10 +39,15 @@ def get_location(index):
     location = None
 
     try:
-        logger.info("Found location '%s'", index)
-        location = LOCATIONS[index]
+        logger.info("Found location '%s'", key)
+        location = LOCATIONS[key]
     except KeyError:
-        logger.warn("Location '%s' not found, defaulting to Nottingham", index)
+        logger.warn("Location '%s' not found, defaulting to Nottingham", key)
         location = LOCATIONS["Nottingham"]
 
-    return location
+    observer = ephem.Observer()
+    observer.lat = location.lat
+    observer.lon = location.long
+    observer.elevation = location.alt
+
+    return observer

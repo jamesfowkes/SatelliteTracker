@@ -183,7 +183,7 @@
 			"file": "Tracker/Tracker.py",
 			"settings":
 			{
-				"buffer_size": 1292,
+				"buffer_size": 1886,
 				"line_ending": "Unix"
 			}
 		},
@@ -199,8 +199,18 @@
 			"file": "TLE/TLEParser.py",
 			"settings":
 			{
-				"buffer_size": 2312,
+				"buffer_size": 3530,
 				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "Searching 533 files for \"<<<<<<<\" (case sensitive)\n\n/home/james/Documents/Code/SatelliteTracker/SatelliteTracker.sublime-workspace:\n  229  		},\n  230  		{\n  231: 			\"contents\": \"Searching 38 files for \\\"<<<<<<<\\\" (case sensitive)\\n\\n/home/james/Documents/Code/SatelliteTracker/application.py:\\n   17  from Tracker import Tracker\\n   18  \\n   19: <<<<<<< HEAD\\n   20  =======\\n   21  import Location\\n   ..\\n   26      \\\"\\\"\\\" Return a command line argument parser for this module \\\"\\\"\\\"\\n   27      arg_parser = argparse.ArgumentParser(\\n   28: <<<<<<< HEAD\\n   29          description='TLE Tracker Application for sending azimuth, altitude strings to hardware')\\n   30  =======\\n   ..\\n   52          help=\\\"The starting altitude of the tracker\\\")\\n   53  \\n   54: <<<<<<< HEAD\\n   55      return arg_parser\\n   56  \\n   ..\\n   86  \\n   87      if tle is None:\\n   88: <<<<<<< HEAD\\n   89          sys.exit(\\\"TLE could not be found.\\\")\\n   90  \\n\\n/home/james/Documents/Code/SatelliteTracker/TLE/TLE.py:\\n   20          self.line1 = line1\\n   21          self.line2 = line2\\n   22: <<<<<<< HEAD:TLE/TLE.py\\n   23          self.name = self.idLine\\n   24  =======\\n   ..\\n   33              self.line1 = tle.line1\\n   34              self.line2 = tle.line2\\n   35: <<<<<<< HEAD:TLE/TLE.py\\n   36              self.lastUpdate = datetime.datetime.now()\\n   37  \\n\\n/home/james/Documents/Code/SatelliteTracker/TLE/TLEProvider.py:\\n    8  \\n    9  import os\\n   10: <<<<<<< HEAD:TLE/TLEProvider.py\\n   11  import sys\\n   12  \\n   ..\\n   19  \\n   20  class TLEProvider:\\n   21: <<<<<<< HEAD:TLE/TLEProvider.py\\n   22  \\n   23      def __init__(self, tleDirectory):\\n   ..\\n   45                      self.add_tle_from_file(tle_directory+\\\"/\\\"+file)\\n   46          except FileNotFoundError:\\n   47: <<<<<<< HEAD:TLE/TLEProvider.py\\n   48              os.mkdir(tleDirectory)\\n   49  \\n   ..\\n   63              raise\\n   64  \\n   65: <<<<<<< HEAD:TLE/TLEProvider.py\\n   66          tleFile.close()\\n   67  \\n   ..\\n  133          return tle\\n  134  \\n  135: <<<<<<< HEAD:TLE/TLEProvider.py\\n  136      def refreshTLE(self, tle):\\n  137  =======\\n  ...\\n  151          return success\\n  152  \\n  153: <<<<<<< HEAD:TLE/TLEProvider.py\\n  154      def listTLEs(self, stream=sys.stdout):\\n  155          for tle in self.tles:\\n\\n12 matches across 3 files\\n\\n\\nSearching 38 files for \\\"<<<<<<<\\\" (case sensitive)\\n\\n/home/james/Documents/Code/SatelliteTracker/TLE/TLE.py:\\n   20          self.line1 = line1\\n   21          self.line2 = line2\\n   22: <<<<<<< HEAD:TLE/TLE.py\\n   23          self.name = self.idLine\\n   24  =======\\n   ..\\n   33              self.line1 = tle.line1\\n   34              self.line2 = tle.line2\\n   35: <<<<<<< HEAD:TLE/TLE.py\\n   36              self.lastUpdate = datetime.datetime.now()\\n   37  \\n\\n/home/james/Documents/Code/SatelliteTracker/TLE/TLEProvider.py:\\n    8  \\n    9  import os\\n   10: <<<<<<< HEAD:TLE/TLEProvider.py\\n   11  import sys\\n   12  \\n   ..\\n   19  \\n   20  class TLEProvider:\\n   21: <<<<<<< HEAD:TLE/TLEProvider.py\\n   22  \\n   23      def __init__(self, tleDirectory):\\n   ..\\n   45                      self.add_tle_from_file(tle_directory+\\\"/\\\"+file)\\n   46          except FileNotFoundError:\\n   47: <<<<<<< HEAD:TLE/TLEProvider.py\\n   48              os.mkdir(tleDirectory)\\n   49  \\n   ..\\n   63              raise\\n   64  \\n   65: <<<<<<< HEAD:TLE/TLEProvider.py\\n   66          tleFile.close()\\n   67  \\n   ..\\n  133          return tle\\n  134  \\n  135: <<<<<<< HEAD:TLE/TLEProvider.py\\n  136      def refreshTLE(self, tle):\\n  137  =======\\n  ...\\n  151          return success\\n  152  \\n  153: <<<<<<< HEAD:TLE/TLEProvider.py\\n  154      def listTLEs(self, stream=sys.stdout):\\n  155          for tle in self.tles:\\n\\n8 matches across 2 files\\n\\n\\nSearching 38 files for \\\"<<<<<<<\\\" (case sensitive)\\n\\n/home/james/Documents/Code/SatelliteTracker/TLE/TLEProvider.py:\\n    8  \\n    9  import os\\n   10: <<<<<<< HEAD:TLE/TLEProvider.py\\n   11  import sys\\n   12  \\n   ..\\n   19  \\n   20  class TLEProvider:\\n   21: <<<<<<< HEAD:TLE/TLEProvider.py\\n   22  \\n   23      def __init__(self, tleDirectory):\\n   ..\\n   45                      self.add_tle_from_file(tle_directory+\\\"/\\\"+file)\\n   46          except FileNotFoundError:\\n   47: <<<<<<< HEAD:TLE/TLEProvider.py\\n   48              os.mkdir(tleDirectory)\\n   49  \\n   ..\\n   63              raise\\n   64  \\n   65: <<<<<<< HEAD:TLE/TLEProvider.py\\n   66          tleFile.close()\\n   67  \\n   ..\\n  133          return tle\\n  134  \\n  135: <<<<<<< HEAD:TLE/TLEProvider.py\\n  136      def refreshTLE(self, tle):\\n  137  =======\\n  ...\\n  151          return success\\n  152  \\n  153: <<<<<<< HEAD:TLE/TLEProvider.py\\n  154      def listTLEs(self, stream=sys.stdout):\\n  155          for tle in self.tles:\\n\\n6 matches in 1 file\\n\",\n  232  			\"settings\":\n  233  			{\n  ...\n  404  		\"find_history\":\n  405  		[\n  406: 			\"<<<<<<<\",\n  407  			\"leading\",\n  408  			\"target\",\n\n/home/james/Documents/Code/SatelliteTracker/TLE/TLEProvider.py:\n    8  \n    9  import os\n   10: <<<<<<< HEAD:TLE/TLEProvider.py\n   11  import sys\n   12  \n\n/home/james/Documents/Code/SatelliteTracker/Tracker/Tracker.py:\n   13  class Tracker:\n   14  \n   15: <<<<<<< HEAD:Tracker/Tracker.py\n   16      def __init__(self, tleProvider, tleParser, hw):\n   17          self.tleParser = tleParser\n\n32 matches across 3 files\n\n\nSearching 533 files for \"<<<<<<<\" (case sensitive)\n\n/home/james/Documents/Code/SatelliteTracker/SatelliteTracker.sublime-workspace:\n  229  		},\n  230  		{\n  231: 			\"contents\": \"Searching 38 files for \\\"<<<<<<<\\\" (case sensitive)\\n\\n/home/james/Documents/Code/SatelliteTracker/application.py:\\n   17  from Tracker import Tracker\\n   18  \\n   19: <<<<<<< HEAD\\n   20  =======\\n   21  import Location\\n   ..\\n   26      \\\"\\\"\\\" Return a command line argument parser for this module \\\"\\\"\\\"\\n   27      arg_parser = argparse.ArgumentParser(\\n   28: <<<<<<< HEAD\\n   29          description='TLE Tracker Application for sending azimuth, altitude strings to hardware')\\n   30  =======\\n   ..\\n   52          help=\\\"The starting altitude of the tracker\\\")\\n   53  \\n   54: <<<<<<< HEAD\\n   55      return arg_parser\\n   56  \\n   ..\\n   86  \\n   87      if tle is None:\\n   88: <<<<<<< HEAD\\n   89          sys.exit(\\\"TLE could not be found.\\\")\\n   90  \\n\\n/home/james/Documents/Code/SatelliteTracker/TLE/TLE.py:\\n   20          self.line1 = line1\\n   21          self.line2 = line2\\n   22: <<<<<<< HEAD:TLE/TLE.py\\n   23          self.name = self.idLine\\n   24  =======\\n   ..\\n   33              self.line1 = tle.line1\\n   34              self.line2 = tle.line2\\n   35: <<<<<<< HEAD:TLE/TLE.py\\n   36              self.lastUpdate = datetime.datetime.now()\\n   37  \\n\\n/home/james/Documents/Code/SatelliteTracker/TLE/TLEProvider.py:\\n    8  \\n    9  import os\\n   10: <<<<<<< HEAD:TLE/TLEProvider.py\\n   11  import sys\\n   12  \\n   ..\\n   19  \\n   20  class TLEProvider:\\n   21: <<<<<<< HEAD:TLE/TLEProvider.py\\n   22  \\n   23      def __init__(self, tleDirectory):\\n   ..\\n   45                      self.add_tle_from_file(tle_directory+\\\"/\\\"+file)\\n   46          except FileNotFoundError:\\n   47: <<<<<<< HEAD:TLE/TLEProvider.py\\n   48              os.mkdir(tleDirectory)\\n   49  \\n   ..\\n   63              raise\\n   64  \\n   65: <<<<<<< HEAD:TLE/TLEProvider.py\\n   66          tleFile.close()\\n   67  \\n   ..\\n  133          return tle\\n  134  \\n  135: <<<<<<< HEAD:TLE/TLEProvider.py\\n  136      def refreshTLE(self, tle):\\n  137  =======\\n  ...\\n  151          return success\\n  152  \\n  153: <<<<<<< HEAD:TLE/TLEProvider.py\\n  154      def listTLEs(self, stream=sys.stdout):\\n  155          for tle in self.tles:\\n\\n12 matches across 3 files\\n\\n\\nSearching 38 files for \\\"<<<<<<<\\\" (case sensitive)\\n\\n/home/james/Documents/Code/SatelliteTracker/TLE/TLE.py:\\n   20          self.line1 = line1\\n   21          self.line2 = line2\\n   22: <<<<<<< HEAD:TLE/TLE.py\\n   23          self.name = self.idLine\\n   24  =======\\n   ..\\n   33              self.line1 = tle.line1\\n   34              self.line2 = tle.line2\\n   35: <<<<<<< HEAD:TLE/TLE.py\\n   36              self.lastUpdate = datetime.datetime.now()\\n   37  \\n\\n/home/james/Documents/Code/SatelliteTracker/TLE/TLEProvider.py:\\n    8  \\n    9  import os\\n   10: <<<<<<< HEAD:TLE/TLEProvider.py\\n   11  import sys\\n   12  \\n   ..\\n   19  \\n   20  class TLEProvider:\\n   21: <<<<<<< HEAD:TLE/TLEProvider.py\\n   22  \\n   23      def __init__(self, tleDirectory):\\n   ..\\n   45                      self.add_tle_from_file(tle_directory+\\\"/\\\"+file)\\n   46          except FileNotFoundError:\\n   47: <<<<<<< HEAD:TLE/TLEProvider.py\\n   48              os.mkdir(tleDirectory)\\n   49  \\n   ..\\n   63              raise\\n   64  \\n   65: <<<<<<< HEAD:TLE/TLEProvider.py\\n   66          tleFile.close()\\n   67  \\n   ..\\n  133          return tle\\n  134  \\n  135: <<<<<<< HEAD:TLE/TLEProvider.py\\n  136      def refreshTLE(self, tle):\\n  137  =======\\n  ...\\n  151          return success\\n  152  \\n  153: <<<<<<< HEAD:TLE/TLEProvider.py\\n  154      def listTLEs(self, stream=sys.stdout):\\n  155          for tle in self.tles:\\n\\n8 matches across 2 files\\n\\n\\nSearching 38 files for \\\"<<<<<<<\\\" (case sensitive)\\n\\n/home/james/Documents/Code/SatelliteTracker/TLE/TLEProvider.py:\\n    8  \\n    9  import os\\n   10: <<<<<<< HEAD:TLE/TLEProvider.py\\n   11  import sys\\n   12  \\n   ..\\n   19  \\n   20  class TLEProvider:\\n   21: <<<<<<< HEAD:TLE/TLEProvider.py\\n   22  \\n   23      def __init__(self, tleDirectory):\\n   ..\\n   45                      self.add_tle_from_file(tle_directory+\\\"/\\\"+file)\\n   46          except FileNotFoundError:\\n   47: <<<<<<< HEAD:TLE/TLEProvider.py\\n   48              os.mkdir(tleDirectory)\\n   49  \\n   ..\\n   63              raise\\n   64  \\n   65: <<<<<<< HEAD:TLE/TLEProvider.py\\n   66          tleFile.close()\\n   67  \\n   ..\\n  133          return tle\\n  134  \\n  135: <<<<<<< HEAD:TLE/TLEProvider.py\\n  136      def refreshTLE(self, tle):\\n  137  =======\\n  ...\\n  151          return success\\n  152  \\n  153: <<<<<<< HEAD:TLE/TLEProvider.py\\n  154      def listTLEs(self, stream=sys.stdout):\\n  155          for tle in self.tles:\\n\\n6 matches in 1 file\\n\",\n  232  			\"settings\":\n  233  			{\n  ...\n  404  		\"find_history\":\n  405  		[\n  406: 			\"<<<<<<<\",\n  407  			\"leading\",\n  408  			\"target\",\n\n/home/james/Documents/Code/SatelliteTracker/Tracker/Tracker.py:\n   13  class Tracker:\n   14  \n   15: <<<<<<< HEAD:Tracker/Tracker.py\n   16      def __init__(self, tleProvider, tleParser, hw):\n   17          self.tleParser = tleParser\n\n31 matches across 2 files\n",
+			"settings":
+			{
+				"buffer_size": 10625,
+				"line_ending": "Unix",
+				"name": "Find Results",
+				"scratch": true
 			}
 		},
 		{
@@ -223,25 +233,15 @@
 			"file": ".gitignore",
 			"settings":
 			{
-				"buffer_size": 103,
+				"buffer_size": 104,
 				"line_ending": "Unix"
-			}
-		},
-		{
-			"contents": "Searching 38 files for \"<<<<<<<\" (case sensitive)\n\n/home/james/Documents/Code/SatelliteTracker/application.py:\n   17  from Tracker import Tracker\n   18  \n   19: <<<<<<< HEAD\n   20  =======\n   21  import Location\n   ..\n   26      \"\"\" Return a command line argument parser for this module \"\"\"\n   27      arg_parser = argparse.ArgumentParser(\n   28: <<<<<<< HEAD\n   29          description='TLE Tracker Application for sending azimuth, altitude strings to hardware')\n   30  =======\n   ..\n   52          help=\"The starting altitude of the tracker\")\n   53  \n   54: <<<<<<< HEAD\n   55      return arg_parser\n   56  \n   ..\n   86  \n   87      if tle is None:\n   88: <<<<<<< HEAD\n   89          sys.exit(\"TLE could not be found.\")\n   90  \n\n/home/james/Documents/Code/SatelliteTracker/TLE/TLE.py:\n   20          self.line1 = line1\n   21          self.line2 = line2\n   22: <<<<<<< HEAD:TLE/TLE.py\n   23          self.name = self.idLine\n   24  =======\n   ..\n   33              self.line1 = tle.line1\n   34              self.line2 = tle.line2\n   35: <<<<<<< HEAD:TLE/TLE.py\n   36              self.lastUpdate = datetime.datetime.now()\n   37  \n\n/home/james/Documents/Code/SatelliteTracker/TLE/TLEProvider.py:\n    8  \n    9  import os\n   10: <<<<<<< HEAD:TLE/TLEProvider.py\n   11  import sys\n   12  \n   ..\n   19  \n   20  class TLEProvider:\n   21: <<<<<<< HEAD:TLE/TLEProvider.py\n   22  \n   23      def __init__(self, tleDirectory):\n   ..\n   45                      self.add_tle_from_file(tle_directory+\"/\"+file)\n   46          except FileNotFoundError:\n   47: <<<<<<< HEAD:TLE/TLEProvider.py\n   48              os.mkdir(tleDirectory)\n   49  \n   ..\n   63              raise\n   64  \n   65: <<<<<<< HEAD:TLE/TLEProvider.py\n   66          tleFile.close()\n   67  \n   ..\n  133          return tle\n  134  \n  135: <<<<<<< HEAD:TLE/TLEProvider.py\n  136      def refreshTLE(self, tle):\n  137  =======\n  ...\n  151          return success\n  152  \n  153: <<<<<<< HEAD:TLE/TLEProvider.py\n  154      def listTLEs(self, stream=sys.stdout):\n  155          for tle in self.tles:\n\n12 matches across 3 files\n\n\nSearching 38 files for \"<<<<<<<\" (case sensitive)\n\n/home/james/Documents/Code/SatelliteTracker/TLE/TLE.py:\n   20          self.line1 = line1\n   21          self.line2 = line2\n   22: <<<<<<< HEAD:TLE/TLE.py\n   23          self.name = self.idLine\n   24  =======\n   ..\n   33              self.line1 = tle.line1\n   34              self.line2 = tle.line2\n   35: <<<<<<< HEAD:TLE/TLE.py\n   36              self.lastUpdate = datetime.datetime.now()\n   37  \n\n/home/james/Documents/Code/SatelliteTracker/TLE/TLEProvider.py:\n    8  \n    9  import os\n   10: <<<<<<< HEAD:TLE/TLEProvider.py\n   11  import sys\n   12  \n   ..\n   19  \n   20  class TLEProvider:\n   21: <<<<<<< HEAD:TLE/TLEProvider.py\n   22  \n   23      def __init__(self, tleDirectory):\n   ..\n   45                      self.add_tle_from_file(tle_directory+\"/\"+file)\n   46          except FileNotFoundError:\n   47: <<<<<<< HEAD:TLE/TLEProvider.py\n   48              os.mkdir(tleDirectory)\n   49  \n   ..\n   63              raise\n   64  \n   65: <<<<<<< HEAD:TLE/TLEProvider.py\n   66          tleFile.close()\n   67  \n   ..\n  133          return tle\n  134  \n  135: <<<<<<< HEAD:TLE/TLEProvider.py\n  136      def refreshTLE(self, tle):\n  137  =======\n  ...\n  151          return success\n  152  \n  153: <<<<<<< HEAD:TLE/TLEProvider.py\n  154      def listTLEs(self, stream=sys.stdout):\n  155          for tle in self.tles:\n\n8 matches across 2 files\n\n\nSearching 38 files for \"<<<<<<<\" (case sensitive)\n\n/home/james/Documents/Code/SatelliteTracker/TLE/TLEProvider.py:\n    8  \n    9  import os\n   10: <<<<<<< HEAD:TLE/TLEProvider.py\n   11  import sys\n   12  \n   ..\n   19  \n   20  class TLEProvider:\n   21: <<<<<<< HEAD:TLE/TLEProvider.py\n   22  \n   23      def __init__(self, tleDirectory):\n   ..\n   45                      self.add_tle_from_file(tle_directory+\"/\"+file)\n   46          except FileNotFoundError:\n   47: <<<<<<< HEAD:TLE/TLEProvider.py\n   48              os.mkdir(tleDirectory)\n   49  \n   ..\n   63              raise\n   64  \n   65: <<<<<<< HEAD:TLE/TLEProvider.py\n   66          tleFile.close()\n   67  \n   ..\n  133          return tle\n  134  \n  135: <<<<<<< HEAD:TLE/TLEProvider.py\n  136      def refreshTLE(self, tle):\n  137  =======\n  ...\n  151          return success\n  152  \n  153: <<<<<<< HEAD:TLE/TLEProvider.py\n  154      def listTLEs(self, stream=sys.stdout):\n  155          for tle in self.tles:\n\n6 matches in 1 file\n",
-			"settings":
-			{
-				"buffer_size": 4456,
-				"line_ending": "Unix",
-				"name": "Find Results",
-				"scratch": true
 			}
 		},
 		{
 			"file": "TLE/TLEProvider.py",
 			"settings":
 			{
-				"buffer_size": 5004,
+				"buffer_size": 3052,
 				"line_ending": "Unix"
 			}
 		},
@@ -392,6 +392,7 @@
 		"height": 90.0,
 		"where_history":
 		[
+			"-env/ -*.sublime-workspace",
 			"-env/",
 			"-env\\*",
 			"-env",
@@ -550,7 +551,7 @@
 	"groups":
 	[
 		{
-			"selected": 7,
+			"selected": 6,
 			"sheets":
 			[
 				{
@@ -558,15 +559,15 @@
 					"file": "Tracker/Tracker.py",
 					"settings":
 					{
-						"buffer_size": 1292,
+						"buffer_size": 1886,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								129,
+								129
 							]
 						],
 						"settings":
@@ -576,7 +577,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 737.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -614,15 +615,15 @@
 					"file": "TLE/TLEParser.py",
 					"settings":
 					{
-						"buffer_size": 2312,
+						"buffer_size": 3530,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1613,
-								1613
+								2015,
+								2015
 							]
 						],
 						"settings":
@@ -632,13 +633,305 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 630.0,
+						"translation.y": 810.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 3,
+					"settings":
+					{
+						"buffer_size": 10625,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										203,
+										210
+									],
+									[
+										346,
+										353
+									],
+									[
+										544,
+										551
+									],
+									[
+										765,
+										772
+									],
+									[
+										869,
+										876
+									],
+									[
+										1082,
+										1089
+									],
+									[
+										1263,
+										1270
+									],
+									[
+										1460,
+										1467
+									],
+									[
+										1571,
+										1578
+									],
+									[
+										1792,
+										1799
+									],
+									[
+										1926,
+										1933
+									],
+									[
+										2050,
+										2057
+									],
+									[
+										2192,
+										2199
+									],
+									[
+										2372,
+										2379
+									],
+									[
+										2536,
+										2543
+									],
+									[
+										2717,
+										2724
+									],
+									[
+										2914,
+										2921
+									],
+									[
+										3025,
+										3032
+									],
+									[
+										3246,
+										3253
+									],
+									[
+										3380,
+										3387
+									],
+									[
+										3504,
+										3511
+									],
+									[
+										3646,
+										3653
+									],
+									[
+										3825,
+										3832
+									],
+									[
+										3954,
+										3961
+									],
+									[
+										4065,
+										4072
+									],
+									[
+										4286,
+										4293
+									],
+									[
+										4420,
+										4427
+									],
+									[
+										4544,
+										4551
+									],
+									[
+										4686,
+										4693
+									],
+									[
+										4921,
+										4928
+									],
+									[
+										5069,
+										5076
+									],
+									[
+										5229,
+										5236
+									],
+									[
+										5594,
+										5601
+									],
+									[
+										5737,
+										5744
+									],
+									[
+										5935,
+										5942
+									],
+									[
+										6156,
+										6163
+									],
+									[
+										6260,
+										6267
+									],
+									[
+										6473,
+										6480
+									],
+									[
+										6654,
+										6661
+									],
+									[
+										6851,
+										6858
+									],
+									[
+										6962,
+										6969
+									],
+									[
+										7183,
+										7190
+									],
+									[
+										7317,
+										7324
+									],
+									[
+										7441,
+										7448
+									],
+									[
+										7583,
+										7590
+									],
+									[
+										7763,
+										7770
+									],
+									[
+										7927,
+										7934
+									],
+									[
+										8108,
+										8115
+									],
+									[
+										8305,
+										8312
+									],
+									[
+										8416,
+										8423
+									],
+									[
+										8637,
+										8644
+									],
+									[
+										8771,
+										8778
+									],
+									[
+										8895,
+										8902
+									],
+									[
+										9037,
+										9044
+									],
+									[
+										9216,
+										9223
+									],
+									[
+										9345,
+										9352
+									],
+									[
+										9456,
+										9463
+									],
+									[
+										9677,
+										9684
+									],
+									[
+										9811,
+										9818
+									],
+									[
+										9935,
+										9942
+									],
+									[
+										10077,
+										10084
+									],
+									[
+										10312,
+										10319
+									],
+									[
+										10465,
+										10472
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								10469,
+								10469
+							]
+						],
+						"settings":
+						{
+							"detect_indentation": false,
+							"output_tag": 2,
+							"result_base_dir": "",
+							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1770.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
 					"file": "Position/position.py",
 					"settings":
 					{
@@ -666,7 +959,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 4,
+					"buffer": 5,
 					"file": "angle_helper.py",
 					"settings":
 					{
@@ -694,19 +987,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 6,
 					"file": ".gitignore",
 					"settings":
 					{
-						"buffer_size": 103,
+						"buffer_size": 104,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								47,
-								47
+								104,
+								104
 							]
 						],
 						"settings":
@@ -720,155 +1013,11 @@
 					"type": "text"
 				},
 				{
-					"buffer": 6,
-					"settings":
-					{
-						"buffer_size": 4456,
-						"regions":
-						{
-							"match":
-							{
-								"flags": 112,
-								"regions":
-								[
-									[
-										161,
-										168
-									],
-									[
-										347,
-										354
-									],
-									[
-										560,
-										567
-									],
-									[
-										658,
-										665
-									],
-									[
-										862,
-										869
-									],
-									[
-										1037,
-										1044
-									],
-									[
-										1227,
-										1234
-									],
-									[
-										1332,
-										1339
-									],
-									[
-										1545,
-										1552
-									],
-									[
-										1673,
-										1680
-									],
-									[
-										1791,
-										1798
-									],
-									[
-										1927,
-										1934
-									],
-									[
-										2257,
-										2264
-									],
-									[
-										2432,
-										2439
-									],
-									[
-										2622,
-										2629
-									],
-									[
-										2727,
-										2734
-									],
-									[
-										2940,
-										2947
-									],
-									[
-										3068,
-										3075
-									],
-									[
-										3186,
-										3193
-									],
-									[
-										3322,
-										3329
-									],
-									[
-										3616,
-										3623
-									],
-									[
-										3721,
-										3728
-									],
-									[
-										3934,
-										3941
-									],
-									[
-										4062,
-										4069
-									],
-									[
-										4180,
-										4187
-									],
-									[
-										4316,
-										4323
-									]
-								],
-								"scope": ""
-							}
-						},
-						"selection":
-						[
-							[
-								3618,
-								3618
-							]
-						],
-						"settings":
-						{
-							"detect_indentation": false,
-							"output_tag": 3,
-							"result_base_dir": "",
-							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
-							"result_line_regex": "^ +([0-9]+):",
-							"scroll_past_end": true,
-							"syntax": "Packages/Default/Find Results.hidden-tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 2010.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
 					"buffer": 7,
 					"file": "TLE/TLEProvider.py",
 					"settings":
 					{
-						"buffer_size": 5004,
+						"buffer_size": 3052,
 						"regions":
 						{
 						},
@@ -886,7 +1035,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 135.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"

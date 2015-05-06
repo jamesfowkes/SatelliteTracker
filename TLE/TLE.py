@@ -19,7 +19,7 @@ class TLE:
         self.id_line = id_line
         self.line1 = line1
         self.line2 = line2
-        self.name = self.idLine
+        self.name = self.id_line
         self.norad_id = self.line2[2:7]
         self.update_interval_seconds = 2 * 60 * 60 #Default update interval is two hours
 

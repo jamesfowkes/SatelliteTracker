@@ -55,8 +55,8 @@ class TLEParser:
         """ Changes the observer """
         self.observer = ephem.Observer()
         self.observer.lat = observer.lat
-        self.observer.lon = observer.long
-        self.observer.elevation = observer.alt
+        self.observer.lon = observer.lon
+        self.observer.elevation = observer.elevation
 
     def get_azimuth(self, degrees=True):
         """ Returns the current azimuth of the tracked object """
@@ -74,11 +74,11 @@ class TLEParser:
 
     def azimuth_speed(self, degrees = True):
         """ Returns the speed of the azimuth across the sky (in degrees per second) """
-        return self.angularSpeed(self.futureLocation.az, self.oldLocation.az)
+        return self.angularSpeed(self.future_location.az, self.old_location.az)
 
     def altitude_speed(self, degrees = True):
         """ Returns the speed of the altitude across the sky (in degrees per second) """
-        return self.angularSpeed(self.futureLocation.al, self.oldLocation.al)
+        return self.angularSpeed(self.future_location.al, self.old_location.al)
 
     @staticmethod
     def angularSpeed(a, b, degrees = True):
